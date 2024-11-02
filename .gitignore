@@ -1,0 +1,34 @@
+# Node.js dependencies
+node_modules/
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# Environment variables
+.env
+# OS-specific files
+.DS_Store
+Thumbs.db
+# Coverage directories used by testing tools
+coverage/
+# Optional npm cache directory
+.npm
+# Optional REPL history
+.node_repl_history
+# IDE files
+.vscode/
+.idea/
+# Temporary files
+*.tmp
+*.temp
+# Build directories
+dist/
+build/
+# MongoDB data (if you’re storing it locally)
+data/
+dump/
+
+# music folder in backend folder
+backend/music/
