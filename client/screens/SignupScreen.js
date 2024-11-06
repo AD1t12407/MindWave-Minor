@@ -8,7 +8,7 @@ const SignupScreen = ({ navigation }) => {
 
     const handleSignup = () => {
         // Handle signup logic here
-        navigation.navigate('DailyQuestionnaire'); // Navigate to DailyQuestionnaire
+        navigation.navigate('FirstQuestionnaire'); // Navigate to DailyQuestionnaire
     };
 
     return (
