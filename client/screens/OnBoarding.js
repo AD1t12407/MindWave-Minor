@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginBottom: 20,
         borderColor: '#fff',
-        borderWidth: 1,
+       
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
         borderRadius: 20,
         borderColor: '#fff',
-        borderWidth: 1,
+        borderWidth: 0.3,
         justifyContent: 'center',
         alignItems: 'center',
     },
