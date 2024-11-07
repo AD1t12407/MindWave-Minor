@@ -51,19 +51,21 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     resizeMode: 'cover',
+
   },
   overlay: {
-    paddingTop:50,
+    paddingTop:100,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingHorizontal: 20,
   },
   timerText: {
-    
     fontSize: 48,
     color: '#FFFFFF',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   timerButton: {
     marginTop: 20,

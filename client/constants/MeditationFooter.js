@@ -14,8 +14,8 @@ const MeditationFooter = () => {
 
     // Navigate based on the tab pressed
     switch (tab) {
-      case 'MeditateTimer':
-        navigation.navigate('NatureMeditate'); // Adjust the screen name as necessary
+      case 'Meditation':
+        navigation.navigate('Meditation'); // Adjust the screen name as necessary
         break;
       case 'Affirmations':
         navigation.navigate('Affirmations'); // Adjust the screen name as necessary
@@ -27,11 +27,11 @@ const MeditationFooter = () => {
 
   return (
     <View style={styles.footer}>
-      <TouchableOpacity onPress={() => handlePress('MeditateTimer')}>
+      <TouchableOpacity onPress={() => handlePress('Meditation')}>
         <MaterialCommunityIcons
           name="flower-tulip"
           size={32} // Increased icon size for better visibility
-          color={activeTab === 'MeditateTimer' ? '#1E90FF' : '#ffffff'}
+          color={activeTab === 'Meditation' ? '#1E90FF' : '#ffffff'}
         />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => handlePress('Affirmations')}>
