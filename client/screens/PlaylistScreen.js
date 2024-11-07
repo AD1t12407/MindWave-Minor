@@ -210,7 +210,7 @@ const PlaylistScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#121212", padding: 16 },
+  container: { flex: 1, backgroundColor: "#121212", paddingTop: 35,padding:5 },
   playlistTitle: {
     color: "#fff",
     fontSize: 24,
