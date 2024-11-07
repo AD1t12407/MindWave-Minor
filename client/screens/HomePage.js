@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
 import Footer from '../constants/Footer'; // Adjust this path if Footer is in a different folder
+import Slider from '@react-native-community/slider'; // Corrected import for slider
 import { Audio } from 'expo-av'; // Ensure you have expo-av installed
 
 const HomePage = () => {
@@ -65,105 +66,132 @@ const HomePage = () => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
+  const onSliderValueChange = (value) => {
+    if (sound) {
+      sound.setPositionAsync(value);
+    }
+    setPosition(value);
+  };
+
   return (
+    <>
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.heading}>Welcome to Home</Text>
-        <Text style={styles.subheading}>
-          Discover playlists, chat, and stay updated with the latest news.
-        </Text>
+        <Text style={styles.heading}>Welcome back Aditi!</Text>
+        
+        {/* Album Art */}
+        <Image
+          source={require('../assets/background.jpg')} // Replace with your album art
+          style={styles.albumArt}
+        />
+        
+        {/* Track Title and Artist */}
+        <Text style={styles.trackTitle}>Curated Ambient Music</Text>
+        
 
-        <View style={styles.player}>
+        {/* Slider and Time */}
+        <View style={styles.sliderContainer}>
           <Text style={styles.timeText}>{formatTime(position)} / {formatTime(duration)}</Text>
-          <View style={styles.buttons}>
-            <TouchableOpacity onPress={isPlaying ? pauseMusic : playMusic} style={styles.playButton}>
-              <Text style={styles.playButtonText}>{isPlaying ? 'Pause' : 'Play'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={stopMusic} style={styles.stopButton}>
-              <Text style={styles.stopButtonText}>Stop</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={toggleLoop} style={styles.loopButton}>
-              <Text style={styles.loopButtonText}>{isLooping ? 'Disable Loop' : 'Enable Loop'}</Text>
-            </TouchableOpacity>
-          </View>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={duration}
+            value={position}
+            onValueChange={onSliderValueChange}
+            minimumTrackTintColor="#1E90FF"
+            maximumTrackTintColor="#d3d3d3"
+            thumbTintColor="#1E90FF"
+          />
         </View>
-      </View>
 
-      <Footer />
+        {/* Controls */}
+        <View style={styles.controls}>
+          <TouchableOpacity onPress={stopMusic} style={styles.controlButton}>
+            <Text style={styles.controlButtonText}>Stop</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={playMusic} style={styles.controlButton}>
+            <Text style={styles.controlButtonText}>{isPlaying ? 'Pause' : 'Play'}</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={toggleLoop} style={styles.controlButton}>
+            <Text style={styles.controlButtonText}>{isLooping ? 'Disable Loop' : 'Enable Loop'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Footer */}
+        
+      </View>
     </View>
+    <Footer />
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
-    backgroundColor: 'black',
+    justifyContent: 'center',
+    backgroundColor: '#121212',
   },
   content: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
+    paddingTop: 50,
   },
   heading: {
-    color: '#1E90FF',
-    fontSize: 28,
+    color: '#FFFFFF',
+    fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  subheading: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
     marginBottom: 20,
   },
-  player: {
+  albumArt: {
+    width: 250,
+    height: 250,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  trackTitle: {
+    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  artist: {
+    color: '#B0B0B0',
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  sliderContainer: {
+    width: '100%',
     alignItems: 'center',
-    marginTop: 20,
   },
   timeText: {
     color: 'white',
     fontSize: 16,
     marginBottom: 10,
   },
-  buttons: {
+  slider: {
+    width: '80%',
+    height: 40,
+    marginBottom: 20,
+  },
+  controls: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
-    maxWidth: 400,
+    marginTop: 20,
   },
-  playButton: {
+  controlButton: {
     backgroundColor: '#1E90FF',
-    borderRadius: 8,
+    borderRadius: 50,
     paddingVertical: 12,
     paddingHorizontal: 24,
-    marginRight: 10,
+    marginHorizontal: 10,
+    alignItems: 'center',
   },
-  playButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  stopButton: {
-    backgroundColor: '#1E90FF',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    marginRight: 10,
-  },
-  stopButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  loopButton: {
-    backgroundColor: '#32CD32',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-  },
-  loopButtonText: {
+  controlButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
