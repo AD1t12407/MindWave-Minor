@@ -11,9 +11,10 @@ import PlaylistScreen from '../screens/PlaylistScreen';
 import Chat from '../screens/Chat';
 import Meditation from '../screens/Meditation';
 import AffirmationsScreen from '../screens/AffirmationsScreen';
-import NatureMeditateScreen from '../screens/NatureMeditateScreen';
+
 import JournalScreen from '../screens/JournalScreen';
 import FirstQuestionnaire from '../screens/FirstQuestionnaire';
+import MeditationTimer from '../screens/MeditationTimer';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,8 +32,9 @@ const AppNavigator = () => {
                 <Stack.Screen name="PlaylistScreen" component={PlaylistScreen} />
                 <Stack.Screen name="Chat" component={Chat} />
                 <Stack.Screen name="Meditation" component={Meditation} />
+                <Stack.Screen name="MeditationTimer" component={MeditationTimer} />
                 <Stack.Screen name="Affirmations" component={AffirmationsScreen}/>
-                <Stack.Screen name="NatureMeditate" component={NatureMeditateScreen}/>
+                
                 <Stack.Screen name="JournalScreen" component={JournalScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
