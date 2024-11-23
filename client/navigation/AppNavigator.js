@@ -6,15 +6,17 @@ import OnBoarding from '../screens/OnBoarding'; // Adjust the path as necessary
 import LoginScreen from '../screens/LoginScreen'; // Adjust the path as necessary
 import SignupScreen from '../screens/SignupScreen'; // Adjust the path as necessary
 import DailyQuestionnaire from '../screens/DailyQuestionnaire'; // Adjust the path as necessary
-import HomePage from '../screens/HomePage'; 
+import HomePage from '../screens/HomePage';
 import PlaylistScreen from '../screens/PlaylistScreen';
 import Chat from '../screens/Chat';
 import Meditation from '../screens/Meditation';
 import AffirmationsScreen from '../screens/AffirmationsScreen';
-
 import JournalScreen from '../screens/JournalScreen';
 import FirstQuestionnaire from '../screens/FirstQuestionnaire';
 import MeditationTimer from '../screens/MeditationTimer';
+import MoodTracker from '../screens/MoodTracker'; // New MoodTracker screen
+import JournalNotes from '../screens/JournalNotes'; // New JournalNotes screen
+import JournalReflections from '../screens/JournalReflections'; // New JournalReflection screen
 
 const Stack = createNativeStackNavigator();
 
@@ -33,9 +35,13 @@ const AppNavigator = () => {
                 <Stack.Screen name="Chat" component={Chat} />
                 <Stack.Screen name="Meditation" component={Meditation} />
                 <Stack.Screen name="MeditationTimer" component={MeditationTimer} />
-                <Stack.Screen name="Affirmations" component={AffirmationsScreen}/>
+                <Stack.Screen name="Affirmations" component={AffirmationsScreen} />
+                <Stack.Screen name="JournalScreen" component={JournalScreen} />
                 
-                <Stack.Screen name="JournalScreen" component={JournalScreen}/>
+                
+                <Stack.Screen name="MoodTracker" component={MoodTracker} /> 
+                <Stack.Screen name="JournalNotes" component={JournalNotes} /> 
+                <Stack.Screen name="JournalReflections" component={JournalReflections} /> 
             </Stack.Navigator>
         </NavigationContainer>
     );
