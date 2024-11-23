@@ -1,26 +1,40 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, Image } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient'; // Install Expo Linear Gradient
 
 const OnBoarding = ({ navigation }) => {
     return (
-        <View style={styles.container}>
-            <Image source={require('../assets/Logo1.png')} style={styles.logo} />
-            <Text style={styles.title}>Tune Your Health with EEG Beats</Text>
+        <LinearGradient 
+            colors={['#001F3F', '#000', '#000']} // Smoother, darker gradient
+            style={styles.container}
+        >
+            <View style={styles.overlay}>
+                <Image source={require('../assets/Logo.png')} style={styles.logo} />
+                <Text style={styles.title}>MINDWAVE</Text>
+                <Text style={styles.subtitle}>Tune Your Health with EEG Beats</Text>
 
-            <Pressable 
-                style={styles.loginButton}
-                onPress={() => navigation.navigate('Login')} // Navigate to LoginScreen
-            >
-                <Text style={styles.buttonText}>Login</Text>
-            </Pressable>
+                {/* Login Button */}
+                <Pressable 
+                    style={styles.loginButton}
+                    onPress={() => navigation.navigate('Login')}
+                >
+                    <LinearGradient
+                        colors={['#3A8DFF', '#00509E']} // Brighter gradient for better contrast
+                        style={styles.buttonBackground}
+                    >
+                        <Text style={styles.buttonText}>Login</Text>
+                    </LinearGradient>
+                </Pressable>
 
-            <Pressable 
-                style={styles.signupButton}
-                onPress={() => navigation.navigate('Signup')} // Navigate to SignupScreen
-            >
-                <Text style={styles.buttonText}>Sign up free</Text>
-            </Pressable>
-        </View>
+                {/* Sign-Up Button */}
+                <Pressable 
+                    style={styles.signupButton}
+                    onPress={() => navigation.navigate('Signup')}
+                >
+                    <Text style={[styles.buttonText, styles.signupText]}>Sign Up Free</Text>
+                </Pressable>
+            </View>
+        </LinearGradient>
     );
 };
 
@@ -29,46 +43,79 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#000',
+        paddingHorizontal: 20,
+    },
+    overlay: {
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)', // Subtle background overlay
+        padding: 30,
+        borderRadius: 20,
+        width: '100%',
     },
     logo: {
         width: 300,
-        height: 350,
+        height: 300,
         marginBottom: 20,
+        resizeMode: 'contain',
+        marginBottom:-80,
     },
     title: {
         color: '#fff',
-        fontSize: 24,
+        fontSize: 28,
         fontWeight: 'bold',
         textAlign: 'center',
+        marginBottom: 10,
+        letterSpacing: 1.2,
+        textTransform: 'uppercase',
+    },
+    subtitle: {
+        color: '#A0C4FF',
+        fontSize: 16,
+        fontWeight: '400',
+        textAlign: 'center',
         marginBottom: 40,
+        letterSpacing: 0.8,
+        lineHeight: 24,
     },
     loginButton: {
-        width: 300,
-        height: 50,
-        backgroundColor: '#167CAB',
-        borderRadius: 20,
+        width: '100%',
+        height: 55,
         marginBottom: 20,
-        borderColor: '#fff',
-       
-        justifyContent: 'center',
-        alignItems: 'center',
+        borderRadius: 30,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.4,
+        shadowRadius: 10,
+        elevation: 8, // For Android shadow
     },
     signupButton: {
-        width: 300,
-        height: 50,
-        backgroundColor: '#000',
-        borderRadius: 20,
-        borderColor: '#fff',
-        borderWidth: 0.3,
+        width: '100%',
+        height: 55,
+        borderRadius: 30,
+        borderColor: '#3A8DFF',
+        borderWidth: 2,
         justifyContent: 'center',
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 5,
+    },
+    buttonBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 30,
     },
     buttonText: {
         color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: '600',
+        textTransform: 'uppercase',
+    },
+    signupText: {
+        color: '#3A8DFF',
     },
 });
 

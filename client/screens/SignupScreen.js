@@ -1,5 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const CustomInput = ({ label, value, onChangeText, placeholder, secureTextEntry }) => (
+    <View style={styles.inputContainer}>
+        <Text style={styles.label}>{label}</Text>
+        <TextInput
+            style={styles.input}
+            placeholder={placeholder}
+            placeholderTextColor="#888"
+            secureTextEntry={secureTextEntry}
+            value={value}
+            onChangeText={onChangeText}
+        />
+    </View>
+);
 
 const SignupScreen = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -8,44 +23,46 @@ const SignupScreen = ({ navigation }) => {
 
     const handleSignup = () => {
         // Handle signup logic here
-        navigation.navigate('FirstQuestionnaire'); // Navigate to DailyQuestionnaire
+        navigation.navigate('FirstQuestionnaire'); // Navigate to FirstQuestionnaire
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.label}>Enter Username</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Username"
-                placeholderTextColor="grey"
+        <LinearGradient
+            colors={['#001F3F', '#000']}
+            style={styles.container}
+        >
+            <Text style={styles.title}>Create Account</Text>
+
+            <CustomInput
+                label="Username"
                 value={username}
                 onChangeText={setUsername}
+                placeholder="Enter your username"
             />
-
-            <Text style={styles.label}>Enter Password</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="grey"
-                secureTextEntry
+            <CustomInput
+                label="Password"
                 value={password}
                 onChangeText={setPassword}
-            />
-
-            <Text style={styles.label}>Confirm Password</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                placeholderTextColor="grey"
+                placeholder="Enter your password"
                 secureTextEntry
+            />
+            <CustomInput
+                label="Confirm Password"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
+                placeholder="Confirm your password"
+                secureTextEntry
             />
 
             <Pressable style={styles.signupButton} onPress={handleSignup}>
-                <Text style={styles.buttonText}>Sign up</Text>
+                <LinearGradient
+                    colors={['#3A8DFF', '#00509E']}
+                    style={styles.buttonBackground}
+                >
+                    <Text style={styles.buttonText}>Sign Up</Text>
+                </LinearGradient>
             </Pressable>
-        </View>
+        </LinearGradient>
     );
 };
 
@@ -54,30 +71,54 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'black',
+        paddingHorizontal: 20,
     },
-    label: {
-        color: 'white',
-        marginBottom: 10,
-        fontSize: 16,
+    title: {
+        color: '#FFF',
+        fontSize: 28,
+        fontWeight: '700',
+        marginBottom: 40,
+        textAlign: 'center',
+        letterSpacing: 1,
     },
-    input: {
-        width: '80%',
-        padding: 10,
-        backgroundColor: '#1C1C1C',
-        color: 'white',
-        borderRadius: 5,
+    inputContainer: {
+        width: '100%',
         marginBottom: 20,
     },
+    label: {
+        color: '#FFF',
+        fontSize: 16,
+        marginBottom: 8,
+        textTransform: 'uppercase',
+        fontWeight: '500',
+    },
+    input: {
+        width: '100%',
+        padding: 14,
+        backgroundColor: '#1C1C1C',
+        color: '#FFF',
+        borderRadius: 10,
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#444',
+    },
     signupButton: {
-        backgroundColor: '#1E90FF',
-        paddingVertical: 10,
-        paddingHorizontal: 80,
-        borderRadius: 20,
+        width: '100%',
+        height: 55,
+        borderRadius: 30,
+        overflow: 'hidden',
+        marginTop: 10,
+    },
+    buttonBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     buttonText: {
-        color: 'white',
-        fontSize: 16,
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
     },
 });
 

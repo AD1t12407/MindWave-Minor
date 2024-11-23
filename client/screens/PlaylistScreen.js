@@ -15,13 +15,13 @@ import { Audio } from "expo-av";
 
 const CLIENT_ID = "a64f4b97d5c744f7a4c6ab788b96a6c0";
 const CLIENT_SECRET = "60ddee3b502348ca8ce43636c8abdd56";
-const MOOD_KEYWORD = "sad to positive";
 
 const PlaylistScreen = () => {
   const [songs, setSongs] = useState([]);
   const [sound, setSound] = useState();
   const [loading, setLoading] = useState(true);
   const [playlistId, setPlaylistId] = useState("");
+  const [mood, setMood] = useState("Calming");
 
   // Fetch Access Token
   const fetchAccessToken = async () => {
@@ -37,20 +37,20 @@ const PlaylistScreen = () => {
     return data.access_token;
   };
 
-  // Fetch Mood-Based Tracks
-  const fetchMoodSongs = async () => {
+  // Fetch Songs Based on Mood
+  const fetchMoodSongs = async (currentMood) => {
     try {
+      setLoading(true);
       const accessToken = await fetchAccessToken();
       const response = await fetch(
         `https://api.spotify.com/v1/search?q=${encodeURIComponent(
-          MOOD_KEYWORD
+          currentMood || mood
         )}&type=track&limit=30`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
 
-      // Check if the response is OK
       if (!response.ok) {
         console.error(
           "Failed to fetch mood songs:",
@@ -81,7 +81,7 @@ const PlaylistScreen = () => {
   };
 
   // Fetch Playlist by ID
-  const fetchPlaylistSongs = async () => {
+  const fetchPlaylistSongs = async (currentMood) => {
     if (!playlistId) return;
     setLoading(true);
     try {
@@ -93,7 +93,6 @@ const PlaylistScreen = () => {
         }
       );
 
-      // Check if the response is OK
       if (!response.ok) {
         console.error(
           "Failed to fetch playlist:",
@@ -105,19 +104,15 @@ const PlaylistScreen = () => {
       }
 
       const data = await response.json();
-
-      // Log the entire response data to understand its structure
-      console.log("Playlist data:", data);
-
-      // Check if items exist and is an array
-      if (!data.items || !Array.isArray(data.items)) {
-        console.error("No items found or items is not an array:", data.items);
-        setLoading(false);
-        return;
-      }
-
       const playlistTracks = data.items
-        .filter((item) => item.track && item.track.preview_url) // Ensure track exists
+        .filter(
+          (item) =>
+            item.track &&
+            item.track.preview_url &&
+            item.track.name.toLowerCase().includes(
+              (currentMood || mood).toLowerCase()
+            )
+        )
         .map((item) => ({
           id: item.track.id,
           title: item.track.name,
@@ -177,11 +172,12 @@ const PlaylistScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.playlistTitle}>Mood: Sad to Positive</Text>
+      <Text style={styles.playlistTitle}>Mood: {mood || "Sad to Happy"}</Text>
+
       <TouchableOpacity style={styles.playButton} onPress={playRandomPreview}>
-        <Icon name="shuffle" size={48} color="#1DB954" />
-        <Text style={styles.playButtonText}>Shuffle Play</Text>
-      </TouchableOpacity>
+  <Icon name="shuffle" size={28} color="#fff" />
+  <Text style={styles.playButtonText}>Shuffle Play</Text>
+</TouchableOpacity>
 
       <FlatList
         data={songs}
@@ -190,7 +186,18 @@ const PlaylistScreen = () => {
         contentContainerStyle={styles.songList}
       />
 
-      {/* Import Playlist Section */}
+<View style={styles.moodContainer}>
+  <TextInput
+    style={styles.moodInput}
+    placeholder="Enter Mood (e.g., Happy, Relaxing)"
+    placeholderTextColor="#888"
+    value={mood}
+    onChangeText={(text) => setMood(text)}
+  />
+  <Button title="Fetch" onPress={() => fetchMoodSongs(mood)} color="#1DB954" />
+</View>
+
+
       <View style={styles.importContainer}>
         <TextInput
           style={styles.playlistInput}
@@ -201,7 +208,7 @@ const PlaylistScreen = () => {
         />
         <Button
           title="Import Playlist"
-          onPress={fetchPlaylistSongs}
+          onPress={() => fetchPlaylistSongs(mood)}
           color="#1DB954"
         />
       </View>
@@ -210,10 +217,15 @@ const PlaylistScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#121212", paddingTop: 35,padding:5 },
+  container: {
+    flex: 1,
+    backgroundColor: "#121212",
+    padding: 10,
+    paddingTop:30
+  },
   playlistTitle: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 20,
@@ -222,36 +234,96 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    padding: 12,
+    backgroundColor: "#1DB954",
+    borderRadius: 25,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
     marginVertical: 20,
   },
   playButtonText: {
-    color: "#1E90FF",
+    color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 8,
   },
-  songList: { paddingBottom: 20 },
+  songList: {
+    paddingBottom: 20,
+  },
   songCard: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#333",
+    backgroundColor: "#1e1e1e",
+    borderRadius: 10,
+    marginVertical: 8,
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
-  albumCover: { width: 50, height: 50, borderRadius: 5, marginRight: 12 },
-  songInfo: { flex: 1 },
-  songTitle: { color: "#fff", fontSize: 16 },
-  songArtist: { color: "#aaa", fontSize: 14 },
-  importContainer: { marginTop: 20 },
+  albumCover: {
+    width: 60,
+    height: 60,
+    borderRadius: 8,
+    marginRight: 12,
+  },
+  songInfo: {
+    flex: 1,
+  },
+  songTitle: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  songArtist: {
+    color: "#ccc",
+    fontSize: 14,
+  },
+  importContainer: {
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: "#1e1e1e",
+    borderRadius: 10,
+  },
   playlistInput: {
+    backgroundColor: "#2a2a2a",
+    color: "#fff",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 10,
+  },
+  moodContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    backgroundColor: "#2a2a2a",
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  moodInput: {
+    flex: 1,
     backgroundColor: "#333",
     padding: 10,
     color: "#fff",
     borderRadius: 8,
-    marginBottom: 10,
+    marginRight: 10,
   },
-  loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
-  loadingText: { color: "#fff", fontSize: 16, marginTop: 10 },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    color: "#fff",
+    fontSize: 16,
+    marginTop: 10,
+  },
 });
+
 
 export default PlaylistScreen;

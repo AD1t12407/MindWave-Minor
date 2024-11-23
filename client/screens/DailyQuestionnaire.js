@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
-import Slider from "@react-native-community/slider"; // Import Slider component
+import Slider from "@react-native-community/slider";
+import { LinearGradient } from 'expo-linear-gradient';
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
 const DailyQuestionnaire = () => {
   const [response, setResponse] = useState("");
   const [mood, setMood] = useState(null);
-  const [brainwaveRange, setBrainwaveRange] = useState(0); // Initial brainwave range
+  const [brainwaveRange, setBrainwaveRange] = useState(0);
   const navigation = useNavigation();
 
   const handleAnalyze = async () => {
@@ -17,7 +18,6 @@ const DailyQuestionnaire = () => {
     }
 
     try {
-      console.log("Analyzing mood..." + response);
       const result = await axios.post("http://localhost:3000/mood_text", {
         text: response,
       });
@@ -37,27 +37,33 @@ const DailyQuestionnaire = () => {
 
   const interpretEmotion = () => {
     if (brainwaveRange > 600 || brainwaveRange < -600) {
-      return "Positive Signals detected: High engagement and positive emotional states (e.g., happiness, excitement, deep introspection).";
+      return "Positive Signals detected: High engagement and positive emotional states.";
     } else if (brainwaveRange > -600 && brainwaveRange < 600) {
-      return "Negative Signals detected: Mild to moderate negative emotions or cognitive discomfort (e.g., anxiety, stress).";
+      return "Negative Signals detected: Mild to moderate negative emotions or stress.";
     } else if (brainwaveRange > -50 && brainwaveRange < 250) {
-      return "Neutral Signals detected: Balanced emotional state, indicating normal cognitive processing without extremes.";
+      return "Neutral Signals detected: Balanced emotional state.";
     }
     return "Emotion undetermined";
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Your Response:</Text>
+    
+      <LinearGradient
+            colors={['#001F3F', '#000']}
+            style={styles.container}>
+        
+      <Text style={styles.title}>Daily Questionnaire</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Type your response here"
-        placeholderTextColor="grey"
+        placeholderTextColor="#aaa"
         value={response}
         onChangeText={setResponse}
+        multiline
       />
 
-      {mood && <Text style={styles.moodText}>Mood: {mood}</Text>}
+      {mood && <Text style={styles.moodText}>Detected Mood: {mood}</Text>}
 
       <Text style={styles.label}>Brainwave Range</Text>
       <Slider
@@ -67,23 +73,22 @@ const DailyQuestionnaire = () => {
         value={brainwaveRange}
         onValueChange={setBrainwaveRange}
         minimumTrackTintColor="#1E90FF"
-        maximumTrackTintColor="#32CD32"
+        maximumTrackTintColor="#ccc"
+        thumbTintColor="#1E90FF"
       />
-      <Text style={styles.rangeText}>Brainwave Range: {brainwaveRange}</Text>
+      <Text style={styles.rangeText}>Brainwave Level: {brainwaveRange}</Text>
 
-      <Text style={styles.emotionText}>
-        Emotion Result: {interpretEmotion()}
-      </Text>
+      <Text style={styles.emotionText}>{interpretEmotion()}</Text>
 
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.analyzeButton} onPress={handleAnalyze}>
+        <Pressable style={[styles.button, styles.analyzeButton]} onPress={handleAnalyze}>
           <Text style={styles.buttonText}>Analyze</Text>
         </Pressable>
-        <Pressable style={styles.nextButton} onPress={handleNext}>
+        <Pressable style={[styles.button, styles.nextButton]} onPress={handleNext}>
           <Text style={styles.buttonText}>Next</Text>
         </Pressable>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -92,62 +97,74 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "black",
+    paddingHorizontal: 20,
+    backgroundColor: "#121212", // Dark theme background
   },
-  label: {
-    color: "white",
-    marginBottom: 10,
-    fontSize: 16,
-  },
-  input: {
-    width: "80%",
-    padding: 10,
-    backgroundColor: "#1C1C1C",
-    color: "white",
-    borderRadius: 5,
+  title: {
+    fontSize: 24,
+    color: "#FFFFFF",
+    fontWeight: "bold",
     marginBottom: 20,
   },
+  input: {
+    width: "100%",
+    padding: 15,
+    backgroundColor: "#1C1C1C",
+    color: "#FFF",
+    borderRadius: 10,
+    fontSize: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#444",
+  },
+  label: {
+    color: "#FFF",
+    fontSize: 16,
+    marginBottom: 10,
+  },
   moodText: {
-    color: "#FFD700",
-    fontSize: 18,
-    marginTop: 10,
-  },
-  slider: {
-    width: "80%",
-    height: 40,
-  },
-  rangeText: {
-    color: "white",
-    fontSize: 14,
-    marginVertical: 5,
-  },
-  emotionText: {
-    color: "#FFD700",
+    color: "#1E90FF",
     fontSize: 18,
     marginVertical: 10,
+  },
+  slider: {
+    width: "100%",
+    height: 40,
+    marginVertical: 10,
+  },
+  rangeText: {
+    color: "#FFF",
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  emotionText: {
+    color: "#1E90FF",
+    fontSize: 16,
+    textAlign: "center",
+    marginVertical: 15,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "80%",
+    width: "100%",
+  },
+  button: {
+    flex: 1,
+    paddingVertical: 12,
+    marginHorizontal: 5,
+    borderRadius: 25,
+    alignItems: "center",
   },
   analyzeButton: {
-    backgroundColor: "#32CD32",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    marginRight: 10,
+    backgroundColor: "#1E90FF",
   },
   nextButton: {
-    backgroundColor: "#1E90FF",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
+    backgroundColor: "#32CD32",
   },
   buttonText: {
-    color: "white",
-
+    color: "#FFF",
     fontSize: 16,
+    fontWeight: "600",
   },
 });
 
