@@ -1,28 +1,49 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet } from 'react-native';
+import { View, Animated, StyleSheet, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window'); // Get screen width for animation
 
 const SplashScreen = ({ navigation }) => {
-  const scaleAnim = useRef(new Animated.Value(0)).current;
+  const wipeAnim = useRef(new Animated.Value(0)).current; // Wipe animation
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Fade-in animation for logo
 
   useEffect(() => {
-    // Start the zoom-in animation
-    const animation = Animated.timing(scaleAnim, {
-      toValue: 1,
-      duration: 1500,
-      useNativeDriver: true,
+    // Combine wipe and fade animations
+    Animated.sequence([
+      // Wipe animation
+      Animated.timing(wipeAnim, {
+        toValue: width, // Expand horizontally
+        duration: 900,
+        useNativeDriver: false, // Required for width animation
+      }),
+      // Fade-in animation for logo
+      Animated.timing(fadeAnim, {
+        toValue: 5,
+        duration: 1600,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      // Navigate to Onboarding after the animation sequence
+      navigation.navigate('Onboarding');
     });
-
-    // Start the animation and navigate to Onboarding after completion
-    animation.start(() => {
-      navigation.navigate('Onboarding'); // Navigate to Onboarding screen
-    });
-  }, [scaleAnim, navigation]);
+  }, [wipeAnim, fadeAnim, navigation]);
 
   return (
     <View style={styles.container}>
+      {/* Wipe Effect */}
+      <Animated.View
+        style={[
+          styles.wipeEffect,
+          {
+            width: wipeAnim, // Animate width dynamically
+          },
+        ]}
+      />
+
+      {/* Logo with Fade-In */}
       <Animated.Image
-        source={require('../assets/icon.png')} // Ensure the path is correct
-        style={[styles.logo, { transform: [{ scale: scaleAnim }] }]}
+        source={require('../assets/icon.png')} // Path to your logo
+        style={[styles.logo, { opacity: fadeAnim }]} // Apply fade effect
         resizeMode="contain"
       />
     </View>
@@ -36,9 +57,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  wipeEffect: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: '#000', // Wipe effect color
+    width: 0, // Start with zero width
+    zIndex: 0, // Keep wipe below the logo
+  },
   logo: {
-    width: 300, // Initial size of the logo
-    height: 350,
+    width: 200,
+    height: 200,
+    zIndex: 1, // Ensure the logo stays above the wipe effect
   },
 });
 

@@ -75,55 +75,51 @@ const HomePage = () => {
 
   return (
     <>
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.heading}>Welcome back Aditi!</Text>
-        
-        {/* Album Art */}
-        <Image
-          source={require('../assets/background.jpg')} // Replace with your album art
-          style={styles.albumArt}
-        />
-        
-        {/* Track Title and Artist */}
-        <Text style={styles.trackTitle}>Curated Ambient Music</Text>
-        
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <Text style={styles.heading}>Welcome back, Aditi!</Text>
 
-        {/* Slider and Time */}
-        <View style={styles.sliderContainer}>
-          <Text style={styles.timeText}>{formatTime(position)} / {formatTime(duration)}</Text>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={duration}
-            value={position}
-            onValueChange={onSliderValueChange}
-            minimumTrackTintColor="#1E90FF"
-            maximumTrackTintColor="#d3d3d3"
-            thumbTintColor="#1E90FF"
+          {/* Album Art */}
+          <Image
+            source={require('../assets/background.jpg')} // Replace with your album art
+            style={styles.albumArt}
           />
-        </View>
 
-        {/* Controls */}
-        <View style={styles.controls}>
-          <TouchableOpacity onPress={stopMusic} style={styles.controlButton}>
-            <Text style={styles.controlButtonText}>Stop</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={playMusic} style={styles.controlButton}>
-            <Text style={styles.controlButtonText}>{isPlaying ? 'Pause' : 'Play'}</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={toggleLoop} style={styles.controlButton}>
-            <Text style={styles.controlButtonText}>{isLooping ? 'Disable Loop' : 'Enable Loop'}</Text>
-          </TouchableOpacity>
-        </View>
+          {/* Track Title and Artist */}
+          <Text style={styles.trackTitle}>Curated Ambient Music</Text>
 
-        {/* Footer */}
-        
+          {/* Slider and Time */}
+          <View style={styles.sliderContainer}>
+            <Text style={styles.timeText}>{formatTime(position)} / {formatTime(duration)}</Text>
+            <Slider
+              style={styles.slider}
+              minimumValue={0}
+              maximumValue={duration}
+              value={position}
+              onValueChange={onSliderValueChange}
+              minimumTrackTintColor="#1E90FF"
+              maximumTrackTintColor="#d3d3d3"
+              thumbTintColor="#1E90FF"
+            />
+          </View>
+
+          {/* Controls */}
+          <View style={styles.controls}>
+            <TouchableOpacity onPress={stopMusic} style={styles.controlButton}>
+              <Text style={styles.controlButtonText}>Stop</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={playMusic} style={styles.controlButton}>
+              <Text style={styles.controlButtonText}>{isPlaying ? 'Pause' : 'Play'}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={toggleLoop} style={styles.controlButton}>
+              <Text style={styles.controlButtonText}>{isLooping ? 'Disable Loop' : 'Enable Loop'}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-    </View>
-    <Footer />
+      <Footer />
     </>
   );
 };
@@ -132,13 +128,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#121212',
+    backgroundColor: 'black',
+    padding: 20,
   },
   content: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 50,
+    paddingTop: 30,
   },
   heading: {
     color: '#FFFFFF',
@@ -151,11 +147,15 @@ const styles = StyleSheet.create({
     height: 250,
     borderRadius: 10,
     marginBottom: 20,
+    shadowOpacity:100,
+    shadowColor:'#000',
+    
   },
   trackTitle: {
     color: '#FFFFFF',
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
   artist: {
     color: '#B0B0B0',
@@ -190,6 +190,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     marginHorizontal: 10,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
   },
   controlButtonText: {
     color: 'white',
