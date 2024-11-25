@@ -47,7 +47,6 @@ const DailyQuestionnaire = () => {
   };
 
   return (
-    
       <LinearGradient
             colors={['#001F3F', '#000']}
             style={styles.container}>
