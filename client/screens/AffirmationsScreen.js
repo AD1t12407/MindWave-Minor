@@ -148,185 +148,207 @@ const AffirmationsScreen = () => {
     Alert.alert("Success", "Affirmation added!");
   };
 
-  return (
-    <>
-      <Animated.View style={{ ...styles.background, opacity: fadeAnim }}>
-        <ImageBackground source={{ uri: backgroundImage }} style={styles.backgroundImage}>
-          <View style={styles.container}>
-            <Text style={styles.title}>Daily Affirmation</Text>
-            <View style={styles.affirmationBox}>
-              <Text style={styles.affirmationText}>{currentAffirmation}</Text>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.swapButton} onPress={changeAffirmation}>
-                  <Ionicons name="swap-horizontal" size={32} color="#fff" />
+  
+    return (
+      <>
+        <Animated.View style={{ ...styles.background, opacity: fadeAnim }}>
+          <ImageBackground source={{ uri: backgroundImage }} style={styles.backgroundImage}>
+            <View style={styles.container}>
+              {/* Header with Category Navigation */}
+              <View style={styles.header}>
+                <Text style={[styles.category, styles.selectedCategory]}>All</Text>
+                <Text style={styles.category}>General</Text>
+                <Text style={styles.category}>Personal Growth</Text>
+              </View>
+  
+              {/* Affirmation Box */}
+              <View style={styles.affirmationBox}>
+                <Text style={styles.affirmationText}>{currentAffirmation}</Text>
+                <View style={styles.buttonContainer}>
+                  {/* Swap Button */}
+                  <TouchableOpacity style={styles.iconButton} onPress={changeAffirmation}>
+                    <Ionicons name="swap-horizontal" size={32} color="#fff" />
+                  </TouchableOpacity>
+                  {/* Download Button */}
+                  <TouchableOpacity style={styles.iconButton} onPress={downloadImage}>
+                    <Ionicons name="download-outline" size={32} color="#fff" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+  
+              {/* Mood Selector */}
+              <View style={styles.moodContainer}>
+                {Object.keys(moodBasedAffirmations).map((mood) => (
+                  <TouchableOpacity
+                    key={mood}
+                    style={[styles.moodButton, selectedMood === mood && styles.selectedMood]}
+                    onPress={() => selectMoodAffirmation(mood)}
+                  >
+                    <Text style={styles.moodText}>{mood}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+  
+              {/* Footer Buttons */}
+              <View style={styles.footer}>
+                <TouchableOpacity style={styles.footerButton} onPress={() => setModalVisible(true)}>
+                  <Ionicons name="add-circle-outline" size={32} color="#fff" />
+                  <Text style={styles.footerButtonText}>Add Affirmation</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.iconButton} onPress={downloadImage}>
-                  <Ionicons name="download-outline" size={32} color="#fff" />
+  
+                <TouchableOpacity style={styles.footerButton} onPress={scheduleNotification}>
+                  <MaterialIcons name="notifications-active" size={32} color="#fff" />
+                  <Text style={styles.footerButtonText}>Set Reminder</Text>
                 </TouchableOpacity>
               </View>
+  
+              {/* Streak Display */}
+              <Text style={styles.streakText}>Streak: {streak} days</Text>
             </View>
-
-            <View style={styles.moodContainer}>
-              {Object.keys(moodBasedAffirmations).map((mood) => (
-                <TouchableOpacity
-                  key={mood}
-                  style={[styles.moodButton, selectedMood === mood && styles.selectedMood]}
-                  onPress={() => selectMoodAffirmation(mood)}
-                >
-                  <Text style={styles.moodText}>{mood}</Text>
-                </TouchableOpacity>
-              ))}
+          </ImageBackground>
+        </Animated.View>
+  
+        {/* Modal for Adding Affirmation */}
+        <Modal visible={modalVisible} animationType="slide" transparent>
+          <View style={styles.overlay}>
+            <View style={styles.modalContent}>
+              <TextInput
+                style={styles.modalInput}
+                placeholder="Enter your affirmation"
+                value={newAffirmation}
+                onChangeText={setNewAffirmation}
+              />
+              <TouchableOpacity style={styles.modalButton} onPress={addUserAffirmation}>
+                <Text style={styles.modalButtonText}>Add</Text>
+              </TouchableOpacity>
             </View>
-
-            <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-              <Ionicons name="add-circle-outline" size={32} color="#fff" />
-              <Text style={styles.addButtonText}>Add Affirmation</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.reminderButton} onPress={scheduleNotification}>
-              <MaterialIcons name="notifications-active" size={32} color="#fff" />
-              <Text style={styles.reminderText}>Set Daily Reminder</Text>
-            </TouchableOpacity>
-
-            <Text style={styles.streakText}>Streak: {streak} days</Text>
           </View>
-        </ImageBackground>
-      </Animated.View>
-
-      {/* Modal for Adding Affirmation */}
-      <Modal visible={modalVisible} animationType="slide" transparent>
-        <TouchableOpacity style={styles.overlay} onPress={() => setModalVisible(false)}>
-          <View style={styles.modalContent}>
-            <TextInput
-              style={styles.modalInput}
-              placeholder="Enter your affirmation"
-              value={newAffirmation}
-              onChangeText={setNewAffirmation}
-            />
-            <TouchableOpacity style={styles.modalButton} onPress={addUserAffirmation}>
-              <Text style={styles.modalButtonText}>Add</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </Modal>
-
-      {/* Footer */}
-      <MeditationFooter />
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: '#3B1E54',
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  container: {
-    flex: 1,
-    paddingTop: Platform.OS === 'ios' ? 60 : 80,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    backgroundColor: 'rgba(59, 30, 84, 0.85)',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  affirmationBox: {
-    backgroundColor: 'rgba(155, 126, 189, 0.9)',
-    padding: 30,
-    borderRadius: 15,
-    marginBottom: 20,
-  },
-  affirmationText: {
-    fontSize: 18,
-    color: '#fff',
-    textAlign: 'center',
-  },
-  moodContainer: {
-    flexDirection: 'row',
-    marginTop: 20,
-    justifyContent: 'space-evenly',
-    width: '100%',
-  },
-  moodButton: {
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: '#5D3EA8',
-  },
-  selectedMood: {
-    backgroundColor: '#F1A661',
-  },
-  moodText: {
-    fontSize: 16,
-    color: '#fff',
-  },
-  addButton: {
-    marginTop: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    marginLeft: 10,
-  },
-  reminderButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  reminderText: {
-    fontSize: 16,
-    color: '#fff',
-    marginLeft: 10,
-  },
-  streakText: {
-    marginTop: 20,
-    color: '#fff',
-    fontSize: 18,
-  },
-  overlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.7)',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
-    alignItems: 'center',
-  },
-  modalInput: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    width: '100%',
-    padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
-  },
-  modalButton: {
-    backgroundColor: '#5D3EA8',
-    padding: 10,
-    borderRadius: 5,
-  },
-  modalButtonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-});
-
-export default AffirmationsScreen;
+        </Modal>
+  
+        {/* Footer */}
+        <MeditationFooter />
+      </>
+    );
+  };
+  
+  const styles = StyleSheet.create({
+    background: {
+      flex: 1,
+      backgroundColor: '#3B1E54',
+    },
+    backgroundImage: {
+      flex: 1,
+      resizeMode: 'cover',
+      justifyContent: 'center',
+    },
+    container: {
+      flex: 1,
+      paddingTop: 50,
+      paddingHorizontal: 20,
+      alignItems: 'center',
+      backgroundColor: 'rgba(59, 30, 84, 0.85)',
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+    },
+    category: {
+      color: 'white',
+      fontSize: 16,
+      paddingBottom: 5,
+    },
+    selectedCategory: {
+      borderBottomWidth: 2,
+      borderBottomColor: '#fff',
+    },
+    affirmationBox: {
+      backgroundColor: 'rgba(155, 126, 189, 0.9)',
+      padding: 30,
+      borderRadius: 20,
+      alignItems: 'center',
+    },
+    affirmationText: {
+      fontSize: 24,
+      color: '#fff',
+      textAlign: 'center',
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginTop: 20,
+    },
+    iconButton: {
+      marginHorizontal: 15,
+    },
+    moodContainer: {
+      flexDirection: 'row',
+      marginTop: 20,
+      justifyContent: 'space-around',
+      width: '100%',
+    },
+    moodButton: {
+      paddingVertical: 12,
+      paddingHorizontal: 25,
+      borderRadius: 12,
+      backgroundColor: '#5D3EA8',
+    },
+    selectedMood: {
+      backgroundColor: '#F1A661',
+    },
+    moodText: {
+      fontSize: 18,
+      color: '#fff',
+    },
+    footer: {
+      flexDirection: 'row',
+      marginTop: 30,
+      justifyContent: 'space-around',
+      width: '100%',
+    },
+    footerButton: {
+      alignItems: 'center',
+    },
+    footerButtonText: {
+      color: '#fff',
+      fontSize: 14,
+      marginTop: 5,
+    },
+    streakText: {
+      color: '#fff',
+      fontSize: 20,
+      marginTop: 25,
+    },
+    overlay: {
+      flex: 1,
+      justifyContent: 'center',
+      backgroundColor: 'rgba(0,0,0,0.7)',
+    },
+    modalContent: {
+      backgroundColor: '#fff',
+      padding: 25,
+      borderRadius: 15,
+      alignItems: 'center',
+    },
+    modalInput: {
+      height: 45,
+      width: '90%',
+      borderColor: '#ccc',
+      borderWidth: 1,
+      paddingHorizontal: 15,
+      borderRadius: 10,
+      marginBottom: 15,
+    },
+    modalButton: {
+      backgroundColor: '#5D3EA8',
+      paddingVertical: 12,
+      paddingHorizontal: 30,
+      borderRadius: 8,
+    },
+    modalButtonText: {
+      color: '#fff',
+      fontSize: 16,
+    },
+  });
+  
+  export default AffirmationsScreen;
