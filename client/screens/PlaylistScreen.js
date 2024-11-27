@@ -153,7 +153,7 @@ const PlaylistScreen = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#1DB954" />
+        <ActivityIndicator size="large" color="#9B7EBD" />
         <Text style={styles.loadingText}>Loading Playlist...</Text>
       </View>
     );
@@ -166,7 +166,7 @@ const PlaylistScreen = () => {
         <Text style={styles.songTitle}>{song.title}</Text>
         <Text style={styles.songArtist}>{song.artist}</Text>
       </View>
-      <Icon name="play-circle-outline" size={24} color="#1DB954" />
+      <Icon name="play-circle-outline" size={24} color="#9B7EBD" />
     </View>
   );
 
@@ -194,7 +194,7 @@ const PlaylistScreen = () => {
     value={mood}
     onChangeText={(text) => setMood(text)}
   />
-  <Button title="Fetch" onPress={() => fetchMoodSongs(mood)} color="#1DB954" />
+  <Button title="Fetch" onPress={() => fetchMoodSongs(mood)} color="#3B1E54" />
 </View>
 
 
@@ -209,7 +209,7 @@ const PlaylistScreen = () => {
         <Button
           title="Import Playlist"
           onPress={() => fetchPlaylistSongs(mood)}
-          color="#1DB954"
+          color="#3B1E54"
         />
       </View>
     </View>
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 12,
-    backgroundColor: "#1DB954",
+    backgroundColor: "#3B1E54",
     borderRadius: 25,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },

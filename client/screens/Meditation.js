@@ -1,6 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as Animatable from 'react-native-animatable';
 import MeditationFooter from '../constants/MeditationFooter';
 
 const themes = [
@@ -14,61 +15,101 @@ const themes = [
 
 const Meditation = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(null);
 
   const handleThemeSelect = (theme) => {
-    navigation.navigate('MeditationTimer', { theme });
+    setLoading(true);
+    setSelectedTheme(theme.id); // Highlight the selected theme
+    setTimeout(() => {
+      setLoading(false);
+      navigation.navigate('MeditationTimer', { theme });
+      setSelectedTheme(null); // Reset highlight after navigation
+    }, 1000);
   };
 
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.text}>Choose a Theme to Meditate!</Text>
-        <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-          {themes.map((theme) => (
-            <TouchableOpacity key={theme.id} onPress={() => handleThemeSelect(theme)} style={styles.themeContainer}>
-              <Image source={theme.image} style={styles.themeImage} />
-              <Text style={styles.imageLabel}>{theme.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        <Text style={styles.title}>Choose a Theme to Meditate!</Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="#fff" />
+        ) : (
+          <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+            {themes.map((theme, index) => (
+              <Animatable.View 
+                key={theme.id} 
+                animation="fadeInUp" 
+                delay={index * 150} 
+                style={styles.themeContainer}
+              >
+                <TouchableOpacity
+                  onPress={() => handleThemeSelect(theme)}
+                  activeOpacity={0.8}
+                  style={styles.touchableTheme}
+                >
+                  <Image source={theme.image} style={styles.themeImage} />
+                  {selectedTheme === theme.id && <View style={styles.overlay} />}
+                  <Text style={styles.imageLabel}>{theme.label}</Text>
+                </TouchableOpacity>
+              </Animatable.View>
+            ))}
+          </ScrollView>
+        )}
       </View>
       <MeditationFooter />
     </>
   );
 };
 
-// Define styles
 const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#0a0a0a',
   },
-  text: {
-    fontSize: 24,
-    color: '#FFFFFF',
+  title: {
+    fontSize: 28,
+    color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   scrollContainer: {
     paddingBottom: 20,
+    paddingHorizontal: 10,
   },
   themeContainer: {
     marginBottom: 20,
+    borderRadius: 12,
+    overflow: 'hidden',
+    elevation: 8,
+    backgroundColor: '#222',
+  },
+  touchableTheme: {
+    position: 'relative',
   },
   themeImage: {
-    width: '100%',      // Make image span full width
-    height: 200,        // Adjust the height as needed
-    borderRadius: 10,
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
   },
   imageLabel: {
-    color: '#FFFFFF',
+    color: '#f0f0f0',
     textAlign: 'center',
-    marginTop: 5,
-    fontSize: 16,
-    fontWeight: '500',
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '600',
+    textTransform: 'capitalize',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject, // Covers the entire parent
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Semi-transparent black
+    borderRadius: 12,
   },
 });
 
 export default Meditation;
+

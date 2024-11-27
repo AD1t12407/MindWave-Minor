@@ -17,6 +17,7 @@ import MeditationTimer from '../screens/MeditationTimer';
 import MoodTracker from '../screens/MoodTracker'; // New MoodTracker screen
 import JournalNotes from '../screens/JournalNotes'; // New JournalNotes screen
 import JournalReflections from '../screens/JournalReflections'; // New JournalReflection screen
+import UserSettingsPage from '../screens/UserSettingsPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ const AppNavigator = () => {
                 <Stack.Screen name="FirstQuestionnaire" component={FirstQuestionnaire} />
                 <Stack.Screen name="DailyQuestionnaire" component={DailyQuestionnaire} />
                 <Stack.Screen name="HomePage" component={HomePage} />
+                <Stack.Screen name="UserSettingsPage" component={UserSettingsPage} />
                 <Stack.Screen name="PlaylistScreen" component={PlaylistScreen} />
                 <Stack.Screen name="Chat" component={Chat} />
                 <Stack.Screen name="Meditation" component={Meditation} />

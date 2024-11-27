@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import Slider from "@react-native-community/slider";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons"; // For next icon
 
 const DailyQuestionnaire = () => {
   const [response, setResponse] = useState("");
@@ -47,10 +48,10 @@ const DailyQuestionnaire = () => {
   };
 
   return (
-      <LinearGradient
-            colors={['#001F3F', '#000']}
-            style={styles.container}>
-        
+    <LinearGradient
+      colors={["#3B1E54", "#000", "#000"]}
+      style={styles.container}
+    >
       <Text style={styles.title}>Daily Questionnaire</Text>
 
       <TextInput
@@ -80,11 +81,27 @@ const DailyQuestionnaire = () => {
       <Text style={styles.emotionText}>{interpretEmotion()}</Text>
 
       <View style={styles.buttonContainer}>
-        <Pressable style={[styles.button, styles.analyzeButton]} onPress={handleAnalyze}>
-          <Text style={styles.buttonText}>Analyze</Text>
+        {/* Analyze Button */}
+        <Pressable style={styles.button} onPress={handleAnalyze}>
+          <LinearGradient
+            colors={["#9B7EBD", "#3B1E54"]}
+            style={styles.buttonBackground}
+          >
+            <Text style={styles.buttonText}>Analyze</Text>
+          </LinearGradient>
         </Pressable>
-        <Pressable style={[styles.button, styles.nextButton]} onPress={handleNext}>
-          <Text style={styles.buttonText}>Next</Text>
+
+        {/* Next Button with Icon */}
+        <Pressable style={styles.button} onPress={handleNext}>
+          <LinearGradient
+            colors={["#9B7EBD", "#3B1E54"]}
+            style={[styles.buttonBackground, styles.nextButton]}
+          >
+            <View style={styles.nextButtonContent}>
+              <Text style={styles.buttonText}>Next </Text>
+              <Ionicons name="arrow-forward" size={20} color="#FFF" />
+            </View>
+          </LinearGradient>
         </Pressable>
       </View>
     </LinearGradient>
@@ -97,13 +114,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
-    backgroundColor: "#121212", // Dark theme background
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     color: "#FFFFFF",
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 30,
+    textAlign: "center",
   },
   input: {
     width: "100%",
@@ -122,8 +139,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   moodText: {
-    color: "#1E90FF",
+    color: "#FFD700",
     fontSize: 18,
+    fontWeight: "600",
     marginVertical: 10,
   },
   slider: {
@@ -134,7 +152,7 @@ const styles = StyleSheet.create({
   rangeText: {
     color: "#FFF",
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   emotionText: {
     color: "#1E90FF",
@@ -146,24 +164,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    marginTop: 20,
   },
   button: {
     flex: 1,
-    paddingVertical: 12,
+    height: 55,
     marginHorizontal: 5,
-    borderRadius: 25,
+    borderRadius: 30,
+    overflow: "hidden",
+  },
+  buttonBackground: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-  },
-  analyzeButton: {
-    backgroundColor: "#1E90FF",
-  },
-  nextButton: {
-    backgroundColor: "#32CD32",
+    flexDirection: "row",
   },
   buttonText: {
     color: "#FFF",
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
+  nextButtonContent: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
