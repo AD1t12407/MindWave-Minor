@@ -36,7 +36,7 @@ const JournalScreen = () => {
             markedDates={{
               [currentDate]: {
                 marked: true,
-                dotColor: '#FF6347', // Bright dot for today's date
+                dotColor: '#D4BEE4', // Bright dot for today's date
                 activeOpacity: 0,
               },
             }}
@@ -44,14 +44,14 @@ const JournalScreen = () => {
             theme={{
               backgroundColor: '#1e1e1e',
               calendarBackground: '#1e1e1e',  // Calendar background
-              textSectionTitleColor: '#d1d1d1', // Month title color
-              selectedDayBackgroundColor: '#FF6347', // Selected day background
+              textSectionTitleColor: '#f1f1f1', // Month title color
+              selectedDayBackgroundColor: '#3B1E54', // Selected day background
               selectedDayTextColor: '#000', // Text color for selected day
-              todayTextColor: '#FF6347', // Today's date text color
-              dayTextColor: '#f1f1f1', // Default day text color
+              todayTextColor: '#9B7EBD', // Today's date text color
+              dayTextColor: '#EEEEEE', // Default day text color
               textDisabledColor: '#444', // Disabled day text color
-              dotColor: '#FF6347', // Default dot color
-              arrowColor: '#FF6347', // Navigation arrows color
+              dotColor: '#9B7EBD', // Default dot color
+              arrowColor: '#9B7EBD', // Navigation arrows color
               monthTextColor: '#f1f1f1', // Month name text color
               indicatorColor: '#FF6347', // Indicator under the month name
               textDayFontWeight: '500',

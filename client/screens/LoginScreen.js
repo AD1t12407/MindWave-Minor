@@ -27,7 +27,7 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <LinearGradient
-            colors={['#001F3F', '#000']}
+            colors={['#3B1E58', '#000','#000']}
             style={styles.container}
         >
             <Text style={styles.title}>Welcome Back! </Text>
@@ -48,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
 
             <Pressable style={styles.loginButton} onPress={handleLogin}>
                 <LinearGradient
-                    colors={['#3A8DFF', '#00509E']}
+                   colors={['#9B7EBD', '#3B1E54']}
                     style={styles.buttonBackground}
                 >
                     <Text style={styles.buttonText}>Login</Text>

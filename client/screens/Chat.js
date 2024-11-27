@@ -7,7 +7,7 @@ const Chat = () => {
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Initialize the Groq client with the API key
+  // Initialize the Groq client (replace API key with a secure method in production)
   const groq = new Groq({
     apiKey: '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'
   });
@@ -15,16 +15,20 @@ const Chat = () => {
   // Effect to send a welcome message when the component mounts
   useEffect(() => {
     const welcomeMessage = {
-      id: 0, // Use a fixed ID for the welcome message
+      id: Date.now(), // Use dynamic ID to prevent conflicts
       text: "How are you feeling today? I'm here to help.",
       sender: 'bot',
     };
-    setMessages((prevMessages) => [welcomeMessage, ...prevMessages]); // Prepend the welcome message
+    setMessages([welcomeMessage]);
   }, []);
 
   const handleSend = async () => {
     if (inputText.trim()) {
-      const userMessage = { id: messages.length + 1, text: inputText, sender: 'user' };
+      const userMessage = {
+        id: Date.now(), // Use dynamic ID to prevent conflicts
+        text: inputText,
+        sender: 'user'
+      };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInputText('');
       setLoading(true);
@@ -57,12 +61,16 @@ const Chat = () => {
         const responseContent = chatCompletion.choices[0].message.content;
 
         // Create the bot message
-        const botMessage = { id: messages.length + 2, text: responseContent, sender: 'bot' };
+        const botMessage = {
+          id: Date.now(), // Use dynamic ID to prevent conflicts
+          text: responseContent,
+          sender: 'bot'
+        };
         setMessages((prevMessages) => [...prevMessages, botMessage]);
       } catch (error) {
         console.error('Error sending message:', error);
         const errorMessage = {
-          id: messages.length + 2,
+          id: Date.now(),
           text: "I'm here to support you, even if there was a technical issue. Please share if you're comfortable.",
           sender: 'bot',
         };
@@ -104,17 +112,45 @@ const Chat = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#000' ,paddingTop:36}, // Black background
+  container: { flex: 1, backgroundColor: '#000', paddingTop: 36 }, // Black background
   messageList: { padding: 20 },
-  welcomeMessage :{alignSelf: 'flex-start', padding: 15, backgroundColor: '#333', borderRadius: 10, marginVertical: 5 },
-  userMessage: { alignSelf: 'flex-end', padding: 10, backgroundColor: '#1e90ff', borderRadius: 10, marginVertical: 5 }, // Blue user message
-  botMessage: { alignSelf: 'flex-start', padding: 15, backgroundColor: '#333', borderRadius: 10, marginVertical: 5 }, // Dark gray bot message
+  welcomeMessage: {
+    alignSelf: 'flex-start', 
+    padding: 15, 
+    backgroundColor: '#333', 
+    borderRadius: 10, 
+    marginVertical: 5
+  },
+  userMessage: {
+    alignSelf: 'flex-end', 
+    padding: 10, 
+    backgroundColor: '#9B7EBD', 
+    borderRadius: 10, 
+    marginVertical: 5 
+  }, // Blue user message
+  botMessage: {
+    alignSelf: 'flex-start', 
+    padding: 15, 
+    backgroundColor: '#333', 
+    borderRadius: 10, 
+    marginVertical: 5 
+  }, // Dark gray bot message
   messageText: { fontSize: 16, color: '#fff' }, // White text for messages
   inputContainer: { flexDirection: 'row', padding: 10, borderTopWidth: 1, borderColor: '#444' }, // Dark gray border
-  input: { flex: 1, backgroundColor: '#222', borderRadius: 20, paddingHorizontal: 15, color: '#fff' }, // Dark input field with white text
-  sendButton: { marginLeft: 10, backgroundColor: '#1e90ff', borderRadius: 20, padding: 10 },
+  input: { 
+    flex: 1, 
+    backgroundColor: '#222', 
+    borderRadius: 20, 
+    paddingHorizontal: 15, 
+    color: '#fff' 
+  }, // Dark input field with white text
+  sendButton: { 
+    marginLeft: 10, 
+    backgroundColor: '#9B7EBD', 
+    borderRadius: 20, 
+    padding: 10 
+  },
   sendButtonText: { color: '#fff', fontWeight: 'bold' }, // White text for send button
 });
 
 export default Chat;
-

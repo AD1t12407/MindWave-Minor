@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   moodButtonSelected: {
-    backgroundColor: '#5a5af5',
+    backgroundColor: '#3B1E54',
   },
   subtitle: {
     color: '#ffffff',
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   factorButtonSelected: {
-    backgroundColor: '#5a5af5',
+    backgroundColor: '#3B1E54',
   },
   factorText: {
     color: '#cccccc',
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   submitButton: {
-    backgroundColor: '#5a5af5',
+    backgroundColor: '#3B1E54',
     borderRadius: 10,
     padding: 15,
     alignItems: 'center',

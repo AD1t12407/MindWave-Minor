@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Audio } from 'expo-av';
+import * as Animatable from 'react-native-animatable';
+import { Circle, Svg } from 'react-native-svg';
+
+const screenWidth = Dimensions.get('window').width;
 
 const MeditationTimer = ({ route }) => {
   const { theme } = route.params;
@@ -15,33 +19,26 @@ const MeditationTimer = ({ route }) => {
     }
   }, [timerRunning, time]);
 
-  // Load the audio file based on the selected theme
   const loadSound = async () => {
-    const soundFileMap = {
-      //mountain: require('../assets/music/mountain.mp3'),
-      rain: require('../assets/music/rain.mp3'),
-      //fire: require('../assets/music/fire.mp3'),
-     //city: require('../assets/music/city.mp3'),
-     // farm: require('../assets/music/farm.mp3'),
-      //night: require('../assets/music/night.mp3'),
-    };
-
-    const { sound } = await Audio.Sound.createAsync(soundFileMap[theme.id]);
-    setSound(sound);
+    try {
+      const soundFileMap = {
+        rain: require('../assets/music/rain.mp3'),
+        // Add other themes as needed
+      };
+      const { sound } = await Audio.Sound.createAsync(soundFileMap[theme.id]);
+      setSound(sound);
+    } catch (error) {
+      console.error('Error loading sound:', error);
+    }
   };
 
-  // Start or stop music playback
   const handleTimerToggle = async () => {
     if (timerRunning) {
       setTimerRunning(false);
-      if (sound) {
-        await sound.pauseAsync();
-      }
+      if (sound) await sound.pauseAsync();
     } else {
       setTimerRunning(true);
-      if (!sound) {
-        await loadSound();
-      }
+      if (!sound) await loadSound();
       if (sound) {
         await sound.setIsLoopingAsync(true);
         await sound.playAsync();
@@ -49,94 +46,132 @@ const MeditationTimer = ({ route }) => {
     }
   };
 
-  // Cleanup the sound when the component unmounts
   useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
+    return sound ? () => sound.unloadAsync() : undefined;
   }, [sound]);
 
   const handleTimeSelect = (selectedTime) => {
     setTime(selectedTime);
     setTimerRunning(false);
-    if (sound) {
-      sound.stopAsync();
-    }
+    if (sound) sound.stopAsync();
   };
+
+  const progress = (time / 300) * 100; // Calculate progress percentage
 
   return (
     <ImageBackground source={theme.image} style={styles.background}>
       <View style={styles.overlay}>
-        <Text style={styles.timerText}>
-          {Math.floor(time / 60)}:{String(time % 60).padStart(2, '0')}
-        </Text>
-        <TouchableOpacity style={styles.timerButton} onPress={handleTimerToggle}>
+        <Animatable.View animation="zoomIn" duration={800} style={styles.circularTimerContainer}>
+          <Svg width={screenWidth * 0.6} height={screenWidth * 0.6} viewBox="0 0 200 200">
+            <Circle cx="100" cy="100" r="90" stroke="#444" strokeWidth="10" fill="none" />
+            <Circle
+              cx="100"
+              cy="100"
+              r="90"
+              stroke="#9B7EBD"
+              strokeWidth="10"
+              fill="none"
+              strokeDasharray="565.48"
+              strokeDashoffset={(565.48 * (100 - progress)) / 100}
+              strokeLinecap="round"
+              style={{ transition: 'stroke-dashoffset 0.5s ease-in-out' }}
+            />
+          </Svg>
+          <Text style={styles.timerText}>{`${Math.floor(time / 60)}:${String(time % 60).padStart(2, '0')}`}</Text>
+        </Animatable.View>
+
+        <TouchableOpacity
+          style={styles.timerButton}
+          onPress={handleTimerToggle}
+          accessible={true}
+          accessibilityLabel={timerRunning ? 'Pause Timer' : 'Start Timer'}
+        >
           <Text style={styles.buttonText}>{timerRunning ? 'Pause' : 'Start'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setTimerRunning(false)}>
-          <Text style={styles.adjustTimer}>Adjust Timer</Text>
-        </TouchableOpacity>
+
         {!timerRunning && (
-          <ScrollView horizontal contentContainerStyle={styles.timeOptions}>
-            {[1, 3, 5, 10, 15].map((minutes) => (
-              <TouchableOpacity key={minutes} onPress={() => handleTimeSelect(minutes * 60)}>
-                <Text style={styles.timeOption}>{minutes} min</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          <Animatable.View animation="fadeInUp" duration={500} style={styles.scrollContainer}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.timeOptions}
+            >
+              {[1, 3, 5, 10, 15].map((minutes) => (
+                <TouchableOpacity
+                  key={minutes}
+                  onPress={() => handleTimeSelect(minutes * 60)}
+                  style={styles.timeOption}
+                  accessible={true}
+                  accessibilityLabel={`Set timer to ${minutes} minutes`}
+                >
+                  <Text style={styles.timeOptionText}>{minutes} min</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </Animatable.View>
         )}
       </View>
     </ImageBackground>
   );
 };
 
-// Define styles
 const styles = StyleSheet.create({
   background: {
     flex: 1,
     resizeMode: 'cover',
   },
   overlay: {
-    paddingTop: 100,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     paddingHorizontal: 20,
   },
+  circularTimerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
   timerText: {
-    fontSize: 48,
-    color: '#FFFFFF',
+    fontSize: 42,
+    color: '#FFF',
     fontWeight: 'bold',
+    position: 'absolute',
     textAlign: 'center',
   },
   timerButton: {
-    marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
+    marginTop: 30,
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    backgroundColor: '#9B7EBD',
+    borderRadius: 25,
+    elevation: 5,
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 22,
+    color: '#FFF',
     fontWeight: 'bold',
-    color: '#000000',
   },
-  adjustTimer: {
-    color: '#FFFFFF',
-    marginTop: 10,
-    textDecorationLine: 'underline',
+  scrollContainer: {
+    marginTop: 20,
+    width: '100%',
   },
   timeOptions: {
     flexDirection: 'row',
-    marginTop: 20,
+    alignItems: 'center',
+    paddingHorizontal: 10,
   },
   timeOption: {
+    marginHorizontal: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 20,
+  },
+  timeOptionText: {
     fontSize: 16,
-    color: '#FFFFFF',
-    marginHorizontal: 10,
+    color: '#FFF',
+    fontWeight: '600',
   },
 });
 

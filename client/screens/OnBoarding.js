@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient'; // Install Expo Linear Gr
 const OnBoarding = ({ navigation }) => {
     return (
         <LinearGradient 
-            colors={['#001F3F', '#000', '#000']} // Smoother, darker gradient
+            colors={['#3B1E54', '#000', '#000']} // Smoother, darker gradient
             style={styles.container}
         >
             <View style={styles.overlay}>
@@ -19,7 +19,7 @@ const OnBoarding = ({ navigation }) => {
                     onPress={() => navigation.navigate('Login')}
                 >
                     <LinearGradient
-                        colors={['#3A8DFF', '#00509E']} // Brighter gradient for better contrast
+                        colors={['#9B7EBD', '#3B1E54']} // Brighter gradient for better contrast
                         style={styles.buttonBackground}
                     >
                         <Text style={styles.buttonText}>Login</Text>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 55,
         borderRadius: 30,
-        borderColor: '#3A8DFF',
+        borderColor: '#3B1E54',
         borderWidth: 2,
         justifyContent: 'center',
         alignItems: 'center',
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
     },
     signupText: {
-        color: '#3A8DFF',
+        color: '#9B7EBD',
     },
 });
 
