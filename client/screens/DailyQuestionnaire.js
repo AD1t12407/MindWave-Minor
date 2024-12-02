@@ -9,7 +9,9 @@ import { Ionicons } from "@expo/vector-icons"; // For next icon
 const DailyQuestionnaire = () => {
   const [response, setResponse] = useState("");
   const [mood, setMood] = useState(null);
-  const [brainwaveRange, setBrainwaveRange] = useState(0);
+  const [arousal, setArousal] = useState(2); // Arousal range: 0-5
+  const [valence, setValence] = useState(0); // Valence range: -5 to 5
+  const [dominance, setDominance] = useState(2); // Dominance range: 0-5
   const navigation = useNavigation();
 
   const handleAnalyze = async () => {
@@ -37,12 +39,14 @@ const DailyQuestionnaire = () => {
   };
 
   const interpretEmotion = () => {
-    if (brainwaveRange > 600 || brainwaveRange < -600) {
-      return "Positive Signals detected: High engagement and positive emotional states.";
-    } else if (brainwaveRange > -600 && brainwaveRange < 600) {
-      return "Negative Signals detected: Mild to moderate negative emotions or stress.";
-    } else if (brainwaveRange > -50 && brainwaveRange < 250) {
-      return "Neutral Signals detected: Balanced emotional state.";
+    if (arousal >= 3 && valence >= 0 && dominance >= 3) {
+      return "Emotion detected: Excited, Positive, and Confident.";
+    } else if (arousal < 3 && valence < 0 && dominance < 3) {
+      return "Emotion detected: Calm, Negative, and Submissive.";
+    } else if (arousal >= 3 && valence < 0 && dominance < 3) {
+      return "Emotion detected: Stressed, Negative, and Submissive.";
+    } else if (arousal < 3 && valence >= 0 && dominance >= 3) {
+      return "Emotion detected: Calm, Positive, and Confident.";
     }
     return "Emotion undetermined";
   };
@@ -52,7 +56,8 @@ const DailyQuestionnaire = () => {
       colors={["#3B1E54", "#000", "#000"]}
       style={styles.container}
     >
-      <Text style={styles.title}>Daily Questionnaire</Text>
+      <Text style={styles.title}>
+        How was your day? </Text>
 
       <TextInput
         style={styles.input}
@@ -65,18 +70,44 @@ const DailyQuestionnaire = () => {
 
       {mood && <Text style={styles.moodText}>Detected Mood: {mood}</Text>}
 
-      <Text style={styles.label}>Brainwave Range</Text>
+      <Text style={styles.label}>Arousal</Text>
       <Slider
         style={styles.slider}
-        minimumValue={-1000}
-        maximumValue={1000}
-        value={brainwaveRange}
-        onValueChange={setBrainwaveRange}
+        minimumValue={0}
+        maximumValue={5}
+        value={arousal}
+        onValueChange={setArousal}
         minimumTrackTintColor="#1E90FF"
         maximumTrackTintColor="#ccc"
         thumbTintColor="#1E90FF"
       />
-      <Text style={styles.rangeText}>Brainwave Level: {brainwaveRange}</Text>
+      <Text style={styles.rangeText}>Arousal Level: {arousal}</Text>
+
+      <Text style={styles.label}>Valence</Text>
+      <Slider
+        style={styles.slider}
+        minimumValue={-5}
+        maximumValue={5}
+        value={valence}
+        onValueChange={setValence}
+        minimumTrackTintColor="#1E90FF"
+        maximumTrackTintColor="#ccc"
+        thumbTintColor="#1E90FF"
+      />
+      <Text style={styles.rangeText}>Valence Level: {valence}</Text>
+
+      <Text style={styles.label}>Dominance</Text>
+      <Slider
+        style={styles.slider}
+        minimumValue={0}
+        maximumValue={5}
+        value={dominance}
+        onValueChange={setDominance}
+        minimumTrackTintColor="#1E90FF"
+        maximumTrackTintColor="#ccc"
+        thumbTintColor="#1E90FF"
+      />
+      <Text style={styles.rangeText}>Dominance Level: {dominance}</Text>
 
       <Text style={styles.emotionText}>{interpretEmotion()}</Text>
 
@@ -113,82 +144,76 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    padding: 20,
   },
   title: {
-    fontSize: 28,
-    color: "#FFFFFF",
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 30,
+    color: "#fff",
+    marginBottom: 20,
     textAlign: "center",
   },
   input: {
     width: "100%",
     padding: 15,
-    backgroundColor: "#1C1C1C",
-    color: "#FFF",
-    borderRadius: 10,
-    fontSize: 16,
+    backgroundColor: "#fff",
+    borderRadius: 8,
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: "#444",
+    textAlignVertical: "top",
+    fontSize: 16,
+    color: "#333",
   },
   label: {
-    color: "#FFF",
     fontSize: 16,
-    marginBottom: 10,
-  },
-  moodText: {
-    color: "#FFD700",
-    fontSize: 18,
-    fontWeight: "600",
-    marginVertical: 10,
+    color: "#fff",
+    marginBottom: 5,
   },
   slider: {
     width: "100%",
     height: 40,
-    marginVertical: 10,
-  },
-  rangeText: {
-    color: "#FFF",
-    fontSize: 16,
     marginBottom: 15,
   },
-  emotionText: {
-    color: "#1E90FF",
+  rangeText: {
     fontSize: 16,
+    color: "#fff",
     textAlign: "center",
-    marginVertical: 15,
+    marginBottom: 10,
+  },
+  emotionText: {
+    fontSize: 18,
+    color: "#fff",
+    marginTop: 20,
+    textAlign: "left",
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginTop: 20,
+    marginTop: 30,
   },
   button: {
     flex: 1,
-    height: 55,
-    marginHorizontal: 5,
-    borderRadius: 30,
-    overflow: "hidden",
+    marginHorizontal: 10,
+    height: 50,
   },
   buttonBackground: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
+    borderRadius: 10,
   },
   buttonText: {
-    color: "#FFF",
     fontSize: 18,
+    color: "#fff",
     fontWeight: "bold",
-    textTransform: "uppercase",
   },
   nextButtonContent: {
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
   },
 });
+
+
 
 export default DailyQuestionnaire;

@@ -18,6 +18,7 @@ import MoodTracker from '../screens/MoodTracker'; // New MoodTracker screen
 import JournalNotes from '../screens/JournalNotes'; // New JournalNotes screen
 import JournalReflections from '../screens/JournalReflections'; // New JournalReflection screen
 import UserSettingsPage from '../screens/UserSettingsPage';
+import RunThrough from '../screens/RunThrough';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ const AppNavigator = () => {
         <NavigationContainer>
             <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Splash" component={SplashScreen} />
+                <Stack.Screen name="RunThrough" component={RunThrough} />
                 <Stack.Screen name="Onboarding" component={OnBoarding} />
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Signup" component={SignupScreen} />

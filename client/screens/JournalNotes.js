@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'expo-image-picker';
-import Voice from 'react-native-voice';
+/*import Voice from 'react-native-voice';*/
 import SignatureScreen from 'react-native-signature-canvas';
 import * as Animatable from 'react-native-animatable';
 
@@ -29,12 +29,12 @@ const JournalNotes = () => {
   const signatureRef = useRef();
 
   useEffect(() => {
-    Voice.onSpeechResults = handleSpeechResults;
+    /*Voice.onSpeechResults = handleSpeechResults;
     Voice.onSpeechError = (error) => console.error('Speech error:', error);
 
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
-    };
+    };*/
   }, []);
 
   const getTextStyle = () => ({

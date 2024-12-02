@@ -1,54 +1,25 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  TextInput,
-  Button,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
-import { Audio } from "expo-av";
+import { View, Text, Image, FlatList, TouchableOpacity, TextInput, Button, StyleSheet, ActivityIndicator } from "react-native";
+import { Audio } from "expo-av"; // Import Audio from expo-av
+import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons for play/pause icons
 
-const CLIENT_ID = "a64f4b97d5c744f7a4c6ab788b96a6c0";
-const CLIENT_SECRET = "60ddee3b502348ca8ce43636c8abdd56";
+const CLIENT_ID = "647fe4e7";
 
 const PlaylistScreen = () => {
   const [songs, setSongs] = useState([]);
-  const [sound, setSound] = useState();
-  const [loading, setLoading] = useState(true);
-  const [playlistId, setPlaylistId] = useState("");
-  const [mood, setMood] = useState("Calming");
+  const [loading, setLoading] = useState(false);
+  const [mood, setMood] = useState("relaxing");
+  const [currentSound, setCurrentSound] = useState(null); // To store the current playing sound instance
+  const [playingSongId, setPlayingSongId] = useState(null); // To track which song is currently playing
 
-  // Fetch Access Token
-  const fetchAccessToken = async () => {
-    const response = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "Basic " + btoa(`${CLIENT_ID}:${CLIENT_SECRET}`),
-      },
-      body: "grant_type=client_credentials",
-    });
-    const data = await response.json();
-    return data.access_token;
-  };
-
-  // Fetch Songs Based on Mood
+  // Fetch Songs Based on Mood from Jamendo API
   const fetchMoodSongs = async (currentMood) => {
     try {
       setLoading(true);
-      const accessToken = await fetchAccessToken();
       const response = await fetch(
-        `https://api.spotify.com/v1/search?q=${encodeURIComponent(
+        `https://api.jamendo.com/v3.0/tracks/?client_id=${CLIENT_ID}&tags=${encodeURIComponent(
           currentMood || mood
-        )}&type=track&limit=30`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
+        )}&limit=100`
       );
 
       if (!response.ok) {
@@ -62,17 +33,15 @@ const PlaylistScreen = () => {
       }
 
       const data = await response.json();
-      const previewTracks = data.tracks.items
-        .filter((track) => track.preview_url)
-        .map((track) => ({
-          id: track.id,
-          title: track.name,
-          artist: track.artists[0].name,
-          albumCover: track.album.images[0].url,
-          previewUrl: track.preview_url,
-        }));
+      const tracks = data.results.map((track) => ({
+        id: track.id,
+        title: track.name,
+        artist: track.artist_name,
+        albumCover: track.image,
+        previewUrl: track.audio,
+      }));
 
-      setSongs(previewTracks);
+      setSongs(tracks);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching mood-based songs:", error);
@@ -80,81 +49,45 @@ const PlaylistScreen = () => {
     }
   };
 
-  // Fetch Playlist by ID
-  const fetchPlaylistSongs = async (currentMood) => {
-    if (!playlistId) return;
-    setLoading(true);
-    try {
-      const accessToken = await fetchAccessToken();
-      const response = await fetch(
-        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      );
-
-      if (!response.ok) {
-        console.error(
-          "Failed to fetch playlist:",
-          response.status,
-          response.statusText
-        );
-        setLoading(false);
-        return;
+  // Play or Pause Song
+  const togglePlayPause = async (song) => {
+    if (playingSongId === song.id) {
+      // If the same song is clicked, toggle play/pause
+      if (currentSound) {
+        await currentSound.stopAsync(); // Stop the current song
+        setCurrentSound(null); // Reset the sound state
+        setPlayingSongId(null); // Reset the playing song ID
+      }
+    } else {
+      // If a different song is clicked, stop the current one and play the new one
+      if (currentSound) {
+        await currentSound.stopAsync();
+        await currentSound.unloadAsync(); // Unload the current song
       }
 
-      const data = await response.json();
-      const playlistTracks = data.items
-        .filter(
-          (item) =>
-            item.track &&
-            item.track.preview_url &&
-            item.track.name.toLowerCase().includes(
-              (currentMood || mood).toLowerCase()
-            )
-        )
-        .map((item) => ({
-          id: item.track.id,
-          title: item.track.name,
-          artist: item.track.artists[0].name,
-          albumCover: item.track.album.images[0].url,
-          previewUrl: item.track.preview_url,
-        }));
-
-      setSongs(playlistTracks);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching playlist songs:", error);
-      setLoading(false);
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: song.previewUrl },
+        { shouldPlay: true }
+      );
+      setCurrentSound(sound); // Store the sound instance
+      setPlayingSongId(song.id); // Set the playing song ID
     }
-  };
-
-  // Play Random Preview
-  const playRandomPreview = async () => {
-    if (songs.length === 0) return;
-    const randomSong = songs[Math.floor(Math.random() * songs.length)];
-
-    if (sound) {
-      await sound.unloadAsync();
-    }
-
-    const { sound: newSound } = await Audio.Sound.createAsync({
-      uri: randomSong.previewUrl,
-    });
-    setSound(newSound);
-    await newSound.playAsync();
   };
 
   useEffect(() => {
     fetchMoodSongs();
-    return sound ? () => sound.unloadAsync() : undefined;
+    return () => {
+      if (currentSound) {
+        currentSound.unloadAsync(); // Unload sound when the component is unmounted
+      }
+    };
   }, []);
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#9B7EBD" />
-        <Text style={styles.loadingText}>Loading Playlist...</Text>
+        <Text style={styles.loadingText}>Loading Songs...</Text>
       </View>
     );
   }
@@ -166,51 +99,38 @@ const PlaylistScreen = () => {
         <Text style={styles.songTitle}>{song.title}</Text>
         <Text style={styles.songArtist}>{song.artist}</Text>
       </View>
-      <Icon name="play-circle-outline" size={24} color="#9B7EBD" />
+      {/* Play/Pause Button */}
+      <TouchableOpacity
+        style={styles.playButton}
+        onPress={() => togglePlayPause(song)}
+      >
+        <Ionicons
+          name={playingSongId === song.id ? "pause-circle-outline" : "play-circle-outline"}
+          size={32}
+          color="#fff"
+        />
+      </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.playlistTitle}>Mood: {mood || "Sad to Happy"}</Text>
-
-      <TouchableOpacity style={styles.playButton} onPress={playRandomPreview}>
-  <Icon name="shuffle" size={28} color="#fff" />
-  <Text style={styles.playButtonText}>Shuffle Play</Text>
-</TouchableOpacity>
-
+      <Text style={styles.playlistTitle}>Mood: {mood}</Text>
       <FlatList
         data={songs}
         renderItem={({ item }) => <SongCard song={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.songList}
       />
-
-<View style={styles.moodContainer}>
-  <TextInput
-    style={styles.moodInput}
-    placeholder="Enter Mood (e.g., Happy, Relaxing)"
-    placeholderTextColor="#888"
-    value={mood}
-    onChangeText={(text) => setMood(text)}
-  />
-  <Button title="Fetch" onPress={() => fetchMoodSongs(mood)} color="#3B1E54" />
-</View>
-
-
-      <View style={styles.importContainer}>
+      <View style={styles.moodContainer}>
         <TextInput
-          style={styles.playlistInput}
-          placeholder="Enter Spotify Playlist ID"
-          placeholderTextColor="#888"
-          value={playlistId}
-          onChangeText={setPlaylistId}
+          style={styles.moodInput}
+          placeholder="Enter Mood (e.g., Happy, Relaxing)"
+          placeholderTextColor="#bbb"
+          value={mood}
+          onChangeText={(text) => setMood(text)}
         />
-        <Button
-          title="Import Playlist"
-          onPress={() => fetchPlaylistSongs(mood)}
-          color="#3B1E54"
-        />
+        <Button title="Fetch" onPress={() => fetchMoodSongs(mood)} color="#9B7EBD" />
       </View>
     </View>
   );
@@ -219,111 +139,79 @@ const PlaylistScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
-    padding: 10,
-    paddingTop:30
+    padding: 16,
+    paddingTop:30,
+    backgroundColor: "#121212", // Dark background
   },
   playlistTitle: {
-    color: "#fff",
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
-  },
-  playButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 12,
-    backgroundColor: "#3B1E54",
-    borderRadius: 25,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    marginVertical: 20,
-  },
-  playButtonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 8,
+    marginBottom: 16,
+    color: "#fff", // Light text
   },
   songList: {
-    paddingBottom: 20,
+    paddingBottom: 100,
   },
   songCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#1e1e1e",
-    borderRadius: 10,
-    marginVertical: 8,
+    marginBottom: 16,
+    backgroundColor: "#1E1E1E", // Darker background for song cards
     padding: 10,
+    borderRadius: 8,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 4,
   },
   albumCover: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 8,
-    marginRight: 12,
+    marginRight: 10,
   },
   songInfo: {
     flex: 1,
   },
   songTitle: {
-    color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    color: "#fff", // Light text for song title
   },
   songArtist: {
-    color: "#ccc",
     fontSize: 14,
+    color: "#bbb", // Lighter text for artist
   },
-  importContainer: {
-    marginVertical: 10,
-    padding: 10,
-    backgroundColor: "#1e1e1e",
-    borderRadius: 10,
-  },
-  playlistInput: {
-    backgroundColor: "#2a2a2a",
-    color: "#fff",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginBottom: 10,
+  playButton: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   moodContainer: {
+    marginTop: 16,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: 10,
-    backgroundColor: "#2a2a2a",
-    borderRadius: 10,
-    marginBottom: 20,
+  
   },
   moodInput: {
     flex: 1,
-    backgroundColor: "#333",
-    padding: 10,
-    color: "#fff",
-    borderRadius: 8,
-    marginRight: 10,
+    padding: 8,
+    marginRight: 8,
+    borderColor: "#bbb", // Lighter border color
+    borderWidth: 1,
+    borderRadius: 4,
+    color: "#fff", // Light text color
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#121212", // Dark background while loading
   },
   loadingText: {
-    color: "#fff",
-    fontSize: 16,
-    marginTop: 10,
+    fontSize: 18,
+    color: "#9B7EBD", // Accent color for text
   },
 });
-
 
 export default PlaylistScreen;
