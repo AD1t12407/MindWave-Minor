@@ -24,7 +24,7 @@ const SplashScreen = ({ navigation }) => {
       }),
     ]).start(() => {
       // Navigate to Onboarding after the animation sequence
-      navigation.navigate('Onboarding');
+      navigation.navigate('RunThrough');
     });
   }, [wipeAnim, fadeAnim, navigation]);
 
