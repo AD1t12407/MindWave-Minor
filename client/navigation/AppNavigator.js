@@ -19,11 +19,12 @@ import JournalNotes from '../screens/JournalNotes'; // New JournalNotes screen
 import JournalReflections from '../screens/JournalReflections'; // New JournalReflection screen
 import UserSettingsPage from '../screens/UserSettingsPage';
 import RunThrough from '../screens/RunThrough';
-
+import { MoodProvider } from "../constants/MoodContext";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
     return (
+        <MoodProvider>
         <NavigationContainer>
             <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Splash" component={SplashScreen} />
@@ -48,6 +49,7 @@ const AppNavigator = () => {
                 <Stack.Screen name="JournalReflections" component={JournalReflections} /> 
             </Stack.Navigator>
         </NavigationContainer>
+        </MoodProvider>
     );
 };
 

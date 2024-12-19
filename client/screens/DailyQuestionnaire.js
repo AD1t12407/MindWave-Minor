@@ -1,19 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import Slider from "@react-native-community/slider";
 import { LinearGradient } from "expo-linear-gradient";
-import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons"; // For next icon
+import axios from "axios";
+import { Ionicons } from "@expo/vector-icons";
+import { useMood } from "../constants/MoodContext";
 
 const DailyQuestionnaire = () => {
   const [response, setResponse] = useState("");
-  const [mood, setMood] = useState(null);
-  const [arousal, setArousal] = useState(2); // Arousal range: 0-5
-  const [valence, setValence] = useState(0); // Valence range: -5 to 5
-  const [dominance, setDominance] = useState(2); // Dominance range: 0-5
+  const { mood, setMood } = useMood([]);
+  const [arousal, setArousal] = useState(2);
+  const [valence, setValence] = useState(0);
+  const [dominance, setDominance] = useState(2);
   const navigation = useNavigation();
 
+  // Function to interpret emotions
+  const interpretEmotion = () => {
+    let detectedMood = [];
+    if (arousal >= 3 && valence >= 0 && dominance >= 3) {
+      detectedMood = ["Excited", "Positive", "Confident"];
+    } else if (arousal < 3 && valence < 0 && dominance < 3) {
+      detectedMood = ["Calm", "Negative", "Submissive"];
+    } else if (arousal >= 3 && valence < 0 && dominance < 3) {
+      detectedMood = ["Stressed", "Negative", "Submissive"];
+    } else if (arousal < 3 && valence >= 0 && dominance >= 3) {
+      detectedMood = ["Calm", "Positive", "Confident"];
+    }
+  
+    return detectedMood; // Return an array of mood states
+  };
+  
+
+  // Update mood based on the interpretation of the emotion
+  useEffect(() => {
+    const detectedMood = interpretEmotion();
+    setMood(detectedMood); // Update mood safely inside useEffect
+  }, [arousal, valence, dominance]); // Dependencies ensure it updates when any slider changes
+
+  // Function to analyze mood from the response (optional API call)
   const handleAnalyze = async () => {
     if (!response.trim()) {
       console.error("Input cannot be empty");
@@ -21,34 +46,23 @@ const DailyQuestionnaire = () => {
     }
 
     try {
-      const result = await axios.post("http://localhost:3000/mood_text", {
+      const result = await axios.post("https://your-api-url.com/mood_text", {
         text: response,
       });
-      setMood(result.data.mood);
+      if (setMood) setMood(result.data.mood); // Set mood from API response
     } catch (error) {
       console.error("Error analyzing mood:", error.message);
     }
   };
 
+  // Handle "Next" button action
   const handleNext = () => {
     if (!response.trim()) {
       console.error("Input cannot be empty");
       return;
     }
-    navigation.navigate("HomePage");
-  };
-
-  const interpretEmotion = () => {
-    if (arousal >= 3 && valence >= 0 && dominance >= 3) {
-      return "Emotion detected: Excited, Positive, and Confident.";
-    } else if (arousal < 3 && valence < 0 && dominance < 3) {
-      return "Emotion detected: Calm, Negative, and Submissive.";
-    } else if (arousal >= 3 && valence < 0 && dominance < 3) {
-      return "Emotion detected: Stressed, Negative, and Submissive.";
-    } else if (arousal < 3 && valence >= 0 && dominance >= 3) {
-      return "Emotion detected: Calm, Positive, and Confident.";
-    }
-    return "Emotion undetermined";
+    
+    navigation.navigate("HomePage", { mood: interpretEmotion() });
   };
 
   return (
@@ -56,8 +70,7 @@ const DailyQuestionnaire = () => {
       colors={["#3B1E54", "#000", "#000"]}
       style={styles.container}
     >
-      <Text style={styles.title}>
-        How was your day? </Text>
+      <Text style={styles.title}>How was your day?</Text>
 
       <TextInput
         style={styles.input}

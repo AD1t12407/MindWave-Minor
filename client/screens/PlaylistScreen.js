@@ -1,24 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, FlatList, TouchableOpacity, TextInput, Button, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  TextInput,
+  Button,
+} from "react-native";
 import { Audio } from "expo-av"; // Import Audio from expo-av
-import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons for play/pause icons
+import Ionicons from "react-native-vector-icons/Ionicons"; // Import Ionicons for play/pause icons
+import { useMood } from "../constants/MoodContext"; // Import MoodContext
 
 const CLIENT_ID = "647fe4e7";
 
 const PlaylistScreen = () => {
+  const { mood: defaultMood } = useMood(); // Access the global mood using MoodContext
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [mood, setMood] = useState("relaxing");
   const [currentSound, setCurrentSound] = useState(null); // To store the current playing sound instance
   const [playingSongId, setPlayingSongId] = useState(null); // To track which song is currently playing
+  const [mood, setMood] = useState(defaultMood && defaultMood.length > 0 ? defaultMood[0] : ""); // Input mood state
 
   // Fetch Songs Based on Mood from Jamendo API
   const fetchMoodSongs = async (currentMood) => {
+    if (!currentMood) return; // Prevent API call for empty mood
     try {
       setLoading(true);
       const response = await fetch(
         `https://api.jamendo.com/v3.0/tracks/?client_id=${CLIENT_ID}&tags=${encodeURIComponent(
-          currentMood || mood
+          currentMood
         )}&limit=100`
       );
 
@@ -74,14 +87,17 @@ const PlaylistScreen = () => {
     }
   };
 
+  // Fetch songs when the default mood changes
   useEffect(() => {
-    fetchMoodSongs();
+    if (defaultMood && defaultMood.length > 0) {
+      fetchMoodSongs(defaultMood[0]);
+    }
     return () => {
       if (currentSound) {
         currentSound.unloadAsync(); // Unload sound when the component is unmounted
       }
     };
-  }, []);
+  }, [defaultMood]);
 
   if (loading) {
     return (
@@ -105,7 +121,11 @@ const PlaylistScreen = () => {
         onPress={() => togglePlayPause(song)}
       >
         <Ionicons
-          name={playingSongId === song.id ? "pause-circle-outline" : "play-circle-outline"}
+          name={
+            playingSongId === song.id
+              ? "pause-circle-outline"
+              : "play-circle-outline"
+          }
           size={32}
           color="#fff"
         />
@@ -115,14 +135,20 @@ const PlaylistScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.playlistTitle}>Mood: {mood}</Text>
+      <Text style={styles.playlistTitle}>
+        Current Mood: {mood || (defaultMood && defaultMood.length > 0 ? defaultMood[0] : "Relaxing")}
+      </Text>
+
+
+
       <FlatList
         data={songs}
         renderItem={({ item }) => <SongCard song={item} />}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.songList}
       />
-      <View style={styles.moodContainer}>
+            {/* Mood Input Box */}
+            <View style={styles.moodContainer}>
         <TextInput
           style={styles.moodInput}
           placeholder="Enter Mood (e.g., Happy, Relaxing)"
@@ -136,11 +162,12 @@ const PlaylistScreen = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    paddingTop:30,
+    paddingTop:50,
     backgroundColor: "#121212", // Dark background
   },
   playlistTitle: {
