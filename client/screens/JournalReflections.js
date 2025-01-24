@@ -15,19 +15,28 @@ import Groq from "groq-sdk";
 
 const JournalReflections = () => {
   const [journalEntries, setJournalEntries] = useState([
-    { id: "1", title: "Productivity Tips", date: "2024-11-20" },
-    { id: "2", title: "Reflections on Kindness", date: "2024-11-22" },
+    { id: "1", title: "Productivity Tips", date: "2024-11-20", response: "" },
+    { id: "2", title: "Reflections on Kindness", date: "2024-11-22", response: "" },
   ]);
   const [markedDates, setMarkedDates] = useState({
     "2024-11-20": { marked: true, dotColor: "#FF6347" },
     "2024-11-22": { marked: true, dotColor: "#FF6347" },
   });
-  const [prompt, setPrompt] = useState("");  // Input for reflection
+  const [mood, setMood] = useState("happy"); // Mood state
   const [response, setResponse] = useState("");  // Groq API response
+  const [prompt, setPrompt] = useState("");  // User input for reflection
 
   const groq = new Groq({
     apiKey: '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',
   });
+
+  // Function to generate mood-based reflection prompt
+  const generateMoodPrompt = () => {
+    if (mood === "happy" || mood === "excited") {
+      return "What made you feel excited or happy today? How can you carry this positivity forward?";
+    }
+    return "Reflect on how you're feeling right now. What could make you feel better?";
+  };
 
   // Function to call the Groq API
   const fetchReflection = async () => {
@@ -37,14 +46,13 @@ const JournalReflections = () => {
           {
             role: "system",
             content: `You are a thoughtful and insightful AI named Llama. Your task is to generate daily prompts that encourage reflection and mindfulness. Each prompt should:
-          
             1. Be thought-provoking and open-ended to inspire deep thinking.
             2. Encourage self-reflection and personal growth.
             3. Promote mindfulness, gratitude, or introspection.
             4. Avoid being overly prescriptive; let the user’s response guide them.
             5. Ensure the prompt is relevant to daily life and provides a space for emotional processing and mental well-being.`
           },
-          { role: "user", content: prompt },  // Use prompt for API
+          { role: "user", content: generateMoodPrompt() },  // Use mood-based prompt
         ],
         model: "llama3-8b-8192",
         temperature: 1,
@@ -75,18 +83,19 @@ const JournalReflections = () => {
     }
   };
 
-  const handleNewEntry = () => {
-    const newDate = new Date().toISOString().split("T")[0];
+  // Function to save the reflection as a journal entry
+  const handleSaveEntry = () => {
     const newEntry = {
       id: Math.random().toString(),
-      title: "New Journal Entry",
-      date: newDate,
+      title: `Reflection - ${new Date().toISOString().split("T")[0]}`,
+      date: new Date().toISOString().split("T")[0],
+      response: response, // Save the API response here
     };
 
     setJournalEntries([...journalEntries, newEntry]);
     setMarkedDates({
       ...markedDates,
-      [newDate]: { marked: true, dotColor: "#FF6347" },
+      [newEntry.date]: { marked: true, dotColor: "#FF6347" },
     });
   };
 
@@ -94,6 +103,7 @@ const JournalReflections = () => {
     <View style={styles.journalItem}>
       <Text style={styles.journalTitle}>{item.title}</Text>
       <Text style={styles.journalDate}>{item.date}</Text>
+      <Text style={styles.journalResponse}>{item.response}</Text>
     </View>
   );
 
@@ -120,6 +130,16 @@ const JournalReflections = () => {
           <TouchableOpacity style={styles.featuredButton}>
             <Text style={styles.featuredButtonText}>Read more</Text>
           </TouchableOpacity>
+        </View>
+
+        {/* Mood Selector */}
+        <View style={styles.moodContainer}>
+          <Text style={styles.sectionTitle}>How are you feeling today?</Text>
+          <View style={styles.moodButtons}>
+            <Button title="Happy" onPress={() => setMood("happy")} color="#FF6347" />
+            <Button title="Excited" onPress={() => setMood("excited")} color="#FF6347" />
+            <Button title="Neutral" onPress={() => setMood("neutral")} color="#FF6347" />
+          </View>
         </View>
 
         {/* Calendar Section */}
@@ -154,6 +174,7 @@ const JournalReflections = () => {
           />
           <Button title="Generate" onPress={fetchReflection} color="#FF6347" />
           <Text style={styles.response}>{response}</Text>
+          <Button title="Save Reflection" onPress={handleSaveEntry} color="#FF6347" />
         </View>
 
         {/* Recent Reflections */}
@@ -168,23 +189,11 @@ const JournalReflections = () => {
           />
         </View>
 
-        {/* Your Articles */}
-        <View style={styles.journalSection}>
-          <Text style={styles.sectionTitle}>Your Diary</Text>
-          <FlatList
-            data={journalEntries}
-            renderItem={renderJournalItem}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
+        {/* Floating Action Button */}
+        <TouchableOpacity style={styles.fab} onPress={handleSaveEntry}>
+          <MaterialCommunityIcons name="plus" size={24} color="#fff" />
+        </TouchableOpacity>
       </ScrollView>
-
-      {/* Floating Action Button */}
-      <TouchableOpacity style={styles.fab} onPress={handleNewEntry}>
-        <MaterialCommunityIcons name="plus" size={24} color="#fff" />
-      </TouchableOpacity>
     </View>
   );
 };
@@ -192,96 +201,89 @@ const JournalReflections = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121212",
-    padding: 20,
-  },
-  reflectionContainer: {
-    backgroundColor: "#2a2a2a",
-    borderRadius: 10,
-    padding: 20,
-    marginBottom: 20,
-  },
-  input: {
-    height: 100,
-    borderColor: "#FF6347",
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 15,
-    color: "#f1f1f1",
     backgroundColor: "#1e1e1e",
-    marginBottom: 10,
   },
-  response: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#f1f1f1",
-  },
-
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
+    padding: 20,
+    backgroundColor: "#FF6347",
   },
   headerTitle: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#f1f1f1",
+    color: "#fff",
   },
   headerIcons: {
     flexDirection: "row",
   },
   featuredSection: {
-    backgroundColor: "#2a2a2a",
-    borderRadius: 10,
     padding: 20,
-    marginBottom: 20,
+    backgroundColor: "#444",
   },
   featuredTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#f1f1f1",
-    marginBottom: 10,
+    fontSize: 18,
+    color: "#fff",
   },
   featuredButton: {
     backgroundColor: "#FF6347",
-    borderRadius: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    alignSelf: "flex-start",
+    padding: 10,
+    marginTop: 10,
+    borderRadius: 5,
   },
   featuredButtonText: {
     color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  calendarContainer: {
-    marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#f1f1f1",
+    fontSize: 16,
+    color: "#fff",
+    marginTop: 10,
+  },
+  moodContainer: {
+    padding: 20,
+    backgroundColor: "#333",
+  },
+  moodButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  calendarContainer: {
+    padding: 10,
+  },
+  reflectionContainer: {
+    padding: 20,
+  },
+  input: {
+    height: 100,
+    borderColor: "#fff",
+    borderWidth: 1,
+    color: "#fff",
+    padding: 10,
     marginBottom: 10,
   },
+  response: {
+    color: "#fff",
+    fontSize: 16,
+    marginTop: 10,
+  },
   journalSection: {
-    marginBottom: 20,
+    padding: 10,
   },
   journalItem: {
-    backgroundColor: "#2a2a2a",
-    borderRadius: 10,
-    padding: 15,
-    marginRight: 10,
-    width: 200,
+    marginRight: 20,
+    backgroundColor: "#444",
+    padding: 10,
+    borderRadius: 5,
   },
   journalTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#f1f1f1",
+    color: "#fff",
+    fontSize: 18,
   },
   journalDate: {
+    color: "#bbb",
+  },
+  journalResponse: {
+    color: "#bbb",
     fontSize: 14,
-    color: "#f1f1f1",
   },
   fab: {
     position: "absolute",

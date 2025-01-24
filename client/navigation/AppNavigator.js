@@ -8,6 +8,7 @@ import SignupScreen from '../screens/SignupScreen'; // Adjust the path as necess
 import DailyQuestionnaire from '../screens/DailyQuestionnaire'; // Adjust the path as necessary
 import HomePage from '../screens/HomePage';
 import PlaylistScreen from '../screens/PlaylistScreen';
+import BrainGames from '../screens/BrainGames';
 import Chat from '../screens/Chat';
 import Meditation from '../screens/Meditation';
 import AffirmationsScreen from '../screens/AffirmationsScreen';
@@ -39,6 +40,7 @@ const AppNavigator = () => {
                 <Stack.Screen name="PlaylistScreen" component={PlaylistScreen} />
                 <Stack.Screen name="Chat" component={Chat} />
                 <Stack.Screen name="Meditation" component={Meditation} />
+                <Stack.Screen name="BrainGames" component={BrainGames} />
                 <Stack.Screen name="MeditationTimer" component={MeditationTimer} />
                 <Stack.Screen name="Affirmations" component={AffirmationsScreen} />
                 <Stack.Screen name="JournalScreen" component={JournalScreen} />

@@ -19,7 +19,7 @@ const DailyQuestionnaire = () => {
   const interpretEmotion = () => {
     let detectedMood = [];
     if (arousal >= 3 && valence >= 0 && dominance >= 3) {
-      detectedMood = ["Excited", "Positive", "Confident"];
+      detectedMood = ["Exciting ", "Positive", "Confident"];
     } else if (arousal < 3 && valence < 0 && dominance < 3) {
       detectedMood = ["Calm", "Negative", "Submissive"];
     } else if (arousal >= 3 && valence < 0 && dominance < 3) {

@@ -19,6 +19,9 @@ const Footer = () => {
       case 'Chat':
         navigation.navigate('Chat');
         break;
+      case 'BrainGames':
+        navigation.navigate('BrainGames');
+        break;
       case 'Songs':
         navigation.navigate('PlaylistScreen');
         break;
@@ -44,6 +47,13 @@ const Footer = () => {
           name="chatbubble-outline"
           size={28}
           color={activeTab === 'Chat' ? '#1E90FF' : '#fff'}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handlePress('BrainGames')}>
+        <MaterialCommunityIcons
+          name="brain"
+          size={28}
+          color={activeTab === 'BrainGames' ? '#1E90FF' : '#fff'}
         />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => handlePress('Meditation')}>
