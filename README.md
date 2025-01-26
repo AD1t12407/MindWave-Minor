@@ -37,7 +37,7 @@ This project is a React Native application designed to promote mental well-being
 
 - Provides therapeutic themes like:
   - **Rain**
-  - **Fire**
+  - **Fire** and more 
   - Other calming soundscapes.
 - Users can set timers for their meditation sessions.
 - Music adapts to the user’s mood and location (if shared).
@@ -72,7 +72,7 @@ This project is a React Native application designed to promote mental well-being
 
 - **LangChain**: Orchestrates the machine learning pipeline.
 - **Lightning AI**: Handles AI model execution with GPU support.
-- **Ngrok**: Provides URL hosting for backend services.
+- **Ngrok**: Provides URL hosting for music generation services .
 
 ### APIs
 
@@ -114,31 +114,6 @@ This project is a React Native application designed to promote mental well-being
    npm install
    ```
 
-3. **Set Up Backend**:
-
-   - Ensure Python environment is set up:
-     ```bash
-     python -m venv music-gen-env
-     source music-gen-env/bin/activate
-     pip install -r requirements.txt
-     ```
-   - Run the backend services:
-     ```bash
-     python musicLm.py
-     ```
-
-4. **Start Ngrok**:
-
-   ```bash
-   ngrok http 5000
-   ```
-
-5. **Run the App**:
-
-   ```bash
-   npm run android   # For Android devices
-   npm run ios       # For iOS devices
-   ```
 
 ### Environment Variables
 
@@ -146,19 +121,24 @@ Create a `.env` file in the project root and add the following:
 
 ```env
 JAMENDO_API_KEY=<your-jamendo-api-key>
-NGROK_URL=<your-ngrok-url>
+NGROK_URL=<Authentication-key>
 ```
 
-## Usage
+## Usage with screenshots 
 
 1. **Login/Sign Up**:
 
    - Create an account or log in to access personalized features.
+    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/mindwave.png)
+    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/onboarding_AVD.png)
+    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/Onboarding.png)
+    
 
 2. **Input EEG Values**:
 
    - Navigate to the EEG tab and input AVD values for mood detection.
-
+    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/user_input.png)
+    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/AVD.png)
 3. **Sentiment Analysis**:
 
    - Enter text in the sentiment analysis section to detect mood.
@@ -166,22 +146,34 @@ NGROK_URL=<your-ngrok-url>
 4. **Access Playlists**:
 
    - View a curated playlist based on your mood.
+   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/Home.png)
+    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/Mood_based_songs.png)
 
 5. **Meditation**:
 
    - Choose a therapeutic theme or set a timer for a session.
+   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/meditation.png)
+   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/timer.png)
+   - Location based music genration using MusicGen- Facebook
+    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/maps_location.png)
+   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/player.png)
 
 6. **Brain Games**:
 
    - Play Sudoku or other games to stimulate cognitive function.
+      ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/brain_games_therapy.png)
 
 7. **Track Mood**:
 
    - Monitor mood trends and insights in the tracking section.
+   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/mood_tracker.png)
 
 8. **Journal**:
 
-   - Log daily thoughts and link them with mood data.
+   - Log daily thoughts and link them with mood data that will further enhance the models performance in the future.
+   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/mood_tracker.png)
+   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/reflections.png)
+   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/journal.png)
 
 ## Future Enhancements
 
