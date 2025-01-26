@@ -5,8 +5,8 @@ import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import MeditationFooter from '../constants/MeditationFooter';
-import { Audio } from 'expo-av'; // For playing audio
-import axios from 'axios'; // To interact with GPT-4 and Riffusion APIs
+import { Audio } from 'expo-av';
+import axios from 'axios';
 
 const themes = [
   { id: 'mountain', label: 'Mountain', image: require('../assets/themes/mountain.jpg') },
@@ -23,68 +23,48 @@ const Meditation = () => {
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [mapVisible, setMapVisible] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [nearbyPlaces, setNearbyPlaces] = useState([]);
-  const [selectedPlace, setSelectedPlace] = useState(null);
-  const [musicUri, setMusicUri] = useState(null); // URI of the generated music
-  const [sound, setSound] = useState(); // Audio player state
-  const [locationContext, setLocationContext] = useState('');
+  const [musicUri, setMusicUri] = useState(null);
+  const [sound, setSound] = useState();
 
   useEffect(() => {
     const requestLocationPermission = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert(
-          'Permission Denied',
-          'Location permission is required to select a location on the map.',
-          [{ text: 'OK' }]
-        );
+        Alert.alert('Permission Denied', 'Location permission is required to select a location on the map.', [{ text: 'OK' }]);
       }
     };
-
     requestLocationPermission();
   }, []);
+// fast api with ngrok 
 
-  const fetchNearbyPlaces = async (latitude, longitude) => {
+  const fetchMusicFromLocation = async (latitude, longitude) => {
     try {
-      const apiKey =GOOGLE_API_KEY ;
-      const radius = 2000; // 2 km radius
-      const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&key=${apiKey}`;
-      const response = await fetch(url);
-      const data = await response.json();
+      setLoading(true);
+      const response = await axios.post('https://0e71-100-24-73-52.ngrok-free.app/generate-music/', {
+        latitude,
+        longitude,
+      });
 
-      if (data.results) {
-        const places = data.results.map(place => ({
-          id: place.place_id,
-          name: place.name,
-          type: place.types[0] // Get the primary type of place
-        }));
-
-
-      // Generate location context for music generation
-      const placeContext = places
-      .slice(0, 5) // Limit to 5 places for prompt
-      .map(place => `${place.name} (${place.type})`)
-      .join(', ');
-    
-    setNearbyPlaces(places);
-    setLocationContext(placeContext);
-    
-    // Immediately generate music prompt
-    await generateMusicPrompt(latitude, longitude, placeContext);
-  }
-} catch (error) {
-  console.error('Error fetching nearby places:', error);
-}
-};
-    
- 
+      if (response.data && response.data.audio_url) {
+        setMusicUri(response.data.audio_url);
+      } else {
+        Alert.alert('Error', 'Could not fetch music from the server.');
+      }
+    } catch (error) {
+      console.error('Error fetching music:', error);
+      Alert.alert('Error', 'Could not fetch music.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleThemeSelect = (theme) => {
     setLoading(true);
     setSelectedTheme(theme.id); // Highlight the selected theme
     setTimeout(() => {
       setLoading(false);
-      navigation.navigate('MeditationTimer', { theme, location: selectedPlace || selectedLocation });
+      // Navigate to the 'MeditationTimer' screen with selected theme and location
+      navigation.navigate('MeditationTimer', { theme, location: selectedLocation });
       setSelectedTheme(null); // Reset highlight after navigation
     }, 1000);
   };
@@ -96,81 +76,7 @@ const Meditation = () => {
   const handleLocationConfirm = async () => {
     setMapVisible(false);
     if (selectedLocation) {
-      fetchNearbyPlaces(selectedLocation.latitude, selectedLocation.longitude);
-      await generateMusicPrompt(selectedLocation.latitude, selectedLocation.longitude);
-    }
-  };
-
-  const handlePlaceSelect = (place) => {
-    setSelectedPlace(place);
-    // Optional: Fetch thematic sounds based on the place type or name
-  };
-
-  const generateMusicPrompt = async (latitude, longitude, placeContext) => {
-    try {
-      // Create a sophisticated prompt for therapeutic music generation
-      const prompt = `Create a deeply therapeutic and calming musical composition 
-        inspired by the following location context: ${placeContext}. 
-        The music should evoke a sense of peace, reflection, and inner tranquility. 
-        Consider the ambient sounds, emotional landscape, and subtle textures 
-        that might emerge from this specific geographical and cultural setting. 
-        Aim for a soundscape that helps listeners meditate, reduce stress, 
-        and connect with their inner self, drawing subtle inspirations from the 
-        surrounding environment's unique characteristics.`;
-
-      // Send to GPT-4 to refine the prompt
-      const gptResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
-        model: 'gpt-4',
-        messages: [
-          {
-            role: 'system', 
-            content: 'You are a master music prompt engineer specializing in therapeutic soundscapes.'
-          },
-          {
-            role: 'user', 
-            content: prompt
-          }
-        ],
-        max_tokens: 200,
-        temperature: 0.7,
-      }, {
-        headers: {
-          'Authorization': `Bearer ${GPT_API_KEY}`,
-        }
-      });
-
-      const refinedPrompt = gptResponse.data.choices[0].message.content;
-      
-      // Generate music using Riffusion
-      await generateMusicFromPrompt(refinedPrompt);
-    } catch (error) {
-      console.error('Error generating music prompt:', error);
-    }
-  };
-
-
-  const generateMusicFromPrompt = async (prompt) => {
-    try {
-      // Call Riffusion API to generate music based on GPT-4 prompt
-      const riffusionResponse = await axios.post('https://api.replicate.com/v1/predictions', {
-        version: 'riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05',
-        input: { 
-          prompt_a: prompt,
-          prompt_b: prompt, // Use same prompt for both to maintain consistency
-          denoising: 0.75, // Adjust for smoother sound
-          seed: Math.floor(Math.random() * 1000000) // Random seed for variation
-        },
-      }, {
-        headers: {
-          'Authorization': `Bearer ${process.env.REPLICATE_API_KEY}`,
-        }
-      });
-
-      const audioUrl = riffusionResponse.data.output.audio;
-      setMusicUri(audioUrl);
-    } catch (error) {
-      console.error('Error generating music:', error);
-      Alert.alert('Music Generation Error', 'Could not generate music based on location.');
+      await fetchMusicFromLocation(selectedLocation.latitude, selectedLocation.longitude);
     }
   };
 
@@ -204,9 +110,7 @@ const Meditation = () => {
                 }}
                 onPress={(e) => setSelectedLocation(e.nativeEvent.coordinate)}
               >
-                {selectedLocation && (
-                  <Marker coordinate={selectedLocation} />
-                )}
+                {selectedLocation && <Marker coordinate={selectedLocation} />}
               </MapView>
               <View style={styles.mapActions}>
                 <Button title="Confirm Location" onPress={handleLocationConfirm} />
@@ -216,34 +120,19 @@ const Meditation = () => {
           </Modal>
         )}
 
-        {nearbyPlaces.length > 0 && (
-          <FlatList
-            data={nearbyPlaces}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.placeItem}
-                onPress={() => handlePlaceSelect(item)}
-              >
-                <Text style={styles.placeName}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        )}
-
         {loading ? (
           <ActivityIndicator size="large" color="#fff" />
         ) : (
           <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
             {themes.map((theme, index) => (
-              <Animatable.View 
-                key={theme.id} 
-                animation="fadeInUp" 
-                delay={index * 150} 
+              <Animatable.View
+                key={theme.id}
+                animation="fadeInUp"
+                delay={index * 150}
                 style={styles.themeContainer}
               >
                 <TouchableOpacity
-                  onPress={() => handleThemeSelect(theme)}
+                  onPress={() => handleThemeSelect(theme)} // Call handleThemeSelect on click
                   activeOpacity={0.8}
                   style={styles.touchableTheme}
                 >
@@ -338,15 +227,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     borderRadius: 12,
-  },
-  placeItem: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  placeName: {
-    fontSize: 16,
-    color: '#fff',
   },
   musicPlayer: {
     marginTop: 20,
