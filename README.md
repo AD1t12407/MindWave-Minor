@@ -107,44 +107,66 @@ Create a `.env` file in the project root and add the following:
 JAMENDO_API_KEY=<your-jamendo-api-key>
 NGROK_URL=<Authentication-key>
 ```
-
 ## Usage with Screenshots
 
 ### 1. **Login/Sign Up**:
    - Create an account or log in to access personalized features.
-   | <img src="screenshots/mindwave.png" width="300" /> | <img src="screenshots/onboarding_AVD.png" width="300" /> |
-   | -------------------------------------------------- | --------------------------------------------------------- |
-   | <img src="screenshots/Onboarding.png" width="300" /> |
+   <br>
+   <img src="screenshots/mindwave.png" width="200" />
+   <br>
+   <img src="screenshots/onboarding_AVD.png" width="200" />
+   <br>
+   <img src="screenshots/Onboarding.png" width="200" />
 
 ### 2. **Input EEG Values**:
    - Navigate to the EEG tab and input AVD values for mood detection.
-   | <img src="screenshots/user_input.png" width="300" /> | <img src="screenshots/AVD.png" width="300" /> |
+   <br>
+   <img src="screenshots/user_input.png" width="200" />
+   <br>
+   <img src="screenshots/AVD.png" width="200" />
 
 ### 3. **Sentiment Analysis**:
    - Enter text in the sentiment analysis section to detect mood.
 
 ### 4. **Access Playlists**:
    - View a curated playlist based on your mood.
-   | <img src="screenshots/Home.png" width="300" /> | <img src="screenshots/Mood_based_songs.png" width="300" /> |
+   <br>
+   <img src="screenshots/Home.png" width="200" />
+   <br>
+   <img src="screenshots/Mood_based_songs.png" width="200" />
 
 ### 5. **Meditation**:
    - Choose a therapeutic theme or set a timer for a session.
-   | <img src="screenshots/meditation.png" width="300" /> | <img src="screenshots/timer.png" width="300" /> |
+   <br>
+   <img src="screenshots/meditation.png" width="200" />
+   <br>
+   <img src="screenshots/timer.png" width="200" />
+   <br>
    - Location-based music generation using MusicGen (Facebook)
-   | <img src="screenshots/maps_location.png" width="300" /> | <img src="screenshots/player.png" width="300" /> |
+   <br>
+   <img src="screenshots/maps_location.png" width="200" />
+   <br>
+   <img src="screenshots/player.png" width="200" />
 
 ### 6. **Brain Games**:
    - Play Sudoku or other games to stimulate cognitive function.
-   | <img src="screenshots/brain_games_therapy.png" width="300" /> |
+   <br>
+   <img src="screenshots/brain_games_therapy.png" width="200" />
 
 ### 7. **Track Mood**:
    - Monitor mood trends and insights in the tracking section.
-   | <img src="screenshots/mood_tracker.png" width="300" /> |
+   <br>
+   <img src="screenshots/mood_tracker.png" width="200" />
 
 ### 8. **Journal**:
    - Log daily thoughts and link them with mood data to enhance the models’ performance.
-   | <img src="screenshots/mood_tracker.png" width="300" /> | <img src="screenshots/reflections.png" width="300" /> |
-   | <img src="screenshots/journal.png" width="300" /> |
+   <br>
+   <img src="screenshots/mood_tracker.png" width="200" />
+   <br>
+   <img src="screenshots/reflections.png" width="200" />
+   <br>
+   <img src="screenshots/journal.png" width="200" />
+
 
 ## Future Enhancements
 
