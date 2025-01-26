@@ -1,5 +1,5 @@
 
-# Music Therapy Application
+# MindWave
 
 ## Overview
 
