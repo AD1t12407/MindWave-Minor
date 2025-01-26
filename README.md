@@ -1,4 +1,4 @@
-Here is the complete README updated with the correct image URLs based on your GitHub repository:
+Here’s the updated README with resized screenshots in the format you requested:
 
 ```markdown
 # Music Therapy Application
@@ -130,44 +130,39 @@ NGROK_URL=<Authentication-key>
 
 1. **Login/Sign Up**:
    - Create an account or log in to access personalized features.
-   ![Login](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/mindwave.png)
-   ![Onboarding AVD](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/onboarding_AVD.png)
-   ![Onboarding](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/Onboarding.png)
+   | <img src="screenshots/mindwave.png" width="100" /> | <img src="screenshots/onboarding_AVD.png" width="100" /> |
+   | -------------------------------------------------- | --------------------------------------------------------- |
+   | <img src="screenshots/Onboarding.png" width="100" /> |
 
 2. **Input EEG Values**:
    - Navigate to the EEG tab and input AVD values for mood detection.
-   ![User Input](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/user_input.png)
-   ![AVD](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/AVD.png)
+   | <img src="screenshots/user_input.png" width="100" /> | <img src="screenshots/AVD.png" width="100" /> |
 
 3. **Sentiment Analysis**:
    - Enter text in the sentiment analysis section to detect mood.
 
 4. **Access Playlists**:
    - View a curated playlist based on your mood.
-   ![Home](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/Home.png)
-   ![Mood-based Songs](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/Mood_based_songs.png)
+   | <img src="screenshots/Home.png" width="100" /> | <img src="screenshots/Mood_based_songs.png" width="100" /> |
 
 5. **Meditation**:
    - Choose a therapeutic theme or set a timer for a session.
-   ![Meditation](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/meditation.png)
-   ![Timer](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/timer.png)
+   | <img src="screenshots/meditation.png" width="100" /> | <img src="screenshots/timer.png" width="100" /> |
    - Location-based music generation using MusicGen (Facebook)
-   ![Location-based Music](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/maps_location.png)
-   ![Player](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/player.png)
+   | <img src="screenshots/maps_location.png" width="100" /> | <img src="screenshots/player.png" width="100" /> |
 
 6. **Brain Games**:
    - Play Sudoku or other games to stimulate cognitive function.
-   ![Brain Games](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/brain_games_therapy.png)
+   | <img src="screenshots/brain_games_therapy.png" width="100" /> |
 
 7. **Track Mood**:
    - Monitor mood trends and insights in the tracking section.
-   ![Mood Tracker](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/mood_tracker.png)
+   | <img src="screenshots/mood_tracker.png" width="100" /> |
 
 8. **Journal**:
    - Log daily thoughts and link them with mood data to enhance the models’ performance.
-   ![Mood Tracker](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/mood_tracker.png)
-   ![Reflections](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/reflections.png)
-   ![Journal](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/journal.png)
+   | <img src="screenshots/mood_tracker.png" width="100" /> | <img src="screenshots/reflections.png" width="100" /> |
+   | <img src="screenshots/journal.png" width="100" /> |
 
 ## Future Enhancements
 
