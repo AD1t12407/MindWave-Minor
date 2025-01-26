@@ -1,3 +1,6 @@
+Here is the complete README updated with the correct image URLs based on your GitHub repository:
+
+```markdown
 # Music Therapy Application
 
 ## Overview
@@ -72,7 +75,7 @@ This project is a React Native application designed to promote mental well-being
 
 - **LangChain**: Orchestrates the machine learning pipeline.
 - **Lightning AI**: Handles AI model execution with GPU support.
-- **Ngrok**: Provides URL hosting for music generation services .
+- **Ngrok**: Provides URL hosting for music generation services.
 
 ### APIs
 
@@ -104,8 +107,8 @@ This project is a React Native application designed to promote mental well-being
 1. **Clone the Repository**:
 
    ```bash
-   git clone <repository-url>
-   cd <project-directory>
+   git clone https://github.com/AD1t12407/MindWave-Minor.git
+   cd MindWave-Minor
    ```
 
 2. **Install Dependencies**:
@@ -113,7 +116,6 @@ This project is a React Native application designed to promote mental well-being
    ```bash
    npm install
    ```
-
 
 ### Environment Variables
 
@@ -124,56 +126,48 @@ JAMENDO_API_KEY=<your-jamendo-api-key>
 NGROK_URL=<Authentication-key>
 ```
 
-## Usage with screenshots 
+## Usage with Screenshots
 
 1. **Login/Sign Up**:
-
    - Create an account or log in to access personalized features.
-    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/mindwave.png)
-    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/onboarding_AVD.png)
-    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/Onboarding.png)
-    
+   ![Login](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/mindwave.png)
+   ![Onboarding AVD](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/onboarding_AVD.png)
+   ![Onboarding](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/Onboarding.png)
 
 2. **Input EEG Values**:
-
    - Navigate to the EEG tab and input AVD values for mood detection.
-    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/user_input.png)
-    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/AVD.png)
-3. **Sentiment Analysis**:
+   ![User Input](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/user_input.png)
+   ![AVD](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/AVD.png)
 
+3. **Sentiment Analysis**:
    - Enter text in the sentiment analysis section to detect mood.
 
 4. **Access Playlists**:
-
    - View a curated playlist based on your mood.
-   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/Home.png)
-    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/Mood_based_songs.png)
+   ![Home](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/Home.png)
+   ![Mood-based Songs](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/Mood_based_songs.png)
 
 5. **Meditation**:
-
    - Choose a therapeutic theme or set a timer for a session.
-   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/meditation.png)
-   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/timer.png)
-   - Location based music genration using MusicGen- Facebook
-    ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/maps_location.png)
-   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/player.png)
+   ![Meditation](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/meditation.png)
+   ![Timer](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/timer.png)
+   - Location-based music generation using MusicGen (Facebook)
+   ![Location-based Music](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/maps_location.png)
+   ![Player](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/player.png)
 
 6. **Brain Games**:
-
    - Play Sudoku or other games to stimulate cognitive function.
-      ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/brain_games_therapy.png)
+   ![Brain Games](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/brain_games_therapy.png)
 
 7. **Track Mood**:
-
    - Monitor mood trends and insights in the tracking section.
-   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/mood_tracker.png)
+   ![Mood Tracker](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/mood_tracker.png)
 
 8. **Journal**:
-
-   - Log daily thoughts and link them with mood data that will further enhance the models performance in the future.
-   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/mood_tracker.png)
-   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/reflections.png)
-   ![screenshot](/Users/aditinarayan/Desktop/Final-Minor/MindWave-Minor/screenshots/journal.png)
+   - Log daily thoughts and link them with mood data to enhance the models’ performance.
+   ![Mood Tracker](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/mood_tracker.png)
+   ![Reflections](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/reflections.png)
+   ![Journal](https://github.com/AD1t12407/MindWave-Minor/blob/main/screenshots/journal.png)
 
 ## Future Enhancements
 
@@ -185,6 +179,5 @@ NGROK_URL=<Authentication-key>
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request for any feature additions or bug fixes.
-
-
+```
 
