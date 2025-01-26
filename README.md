@@ -1,4 +1,4 @@
-Here’s the updated README with resized screenshots in the format you requested:
+Got it! Here's the corrected README with the screenshots properly aligned, one line after the description as requested:
 
 ```markdown
 # Music Therapy Application
@@ -14,20 +14,29 @@ This project is a React Native application designed to promote mental well-being
 - Users can create an account and log in securely.
 - Authentication ensures personalized experiences and data security.
 
+   ![Login/Sign Up](screenshots/mindwave.png)
+
 ### 2. **EEG-Based Emotion Recognition**
 
 - Users input EEG-derived values (AVD values) for emotion recognition.
 - The system uses these values to determine the user's current mood.
+
+   ![EEG Input](screenshots/user_input.png)
 
 ### 3. **Sentiment Analysis**
 
 - Users can input text to analyze their sentiment.
 - Mood is recognized based on the sentiment and used for further personalization.
 
+   ![Sentiment Analysis](screenshots/AVD.png)
+
 ### 4. **Personalized Music Playlists**
 
 - Songs are fetched from the **Jamendo API** based on the user’s mood.
 - A curated playlist is presented to the user.
+
+   ![Playlists](screenshots/Home.png)
+   ![Mood-based Songs](screenshots/Mood_based_songs.png)
 
 ### 5. **Music Generation**
 
@@ -45,20 +54,31 @@ This project is a React Native application designed to promote mental well-being
 - Users can set timers for their meditation sessions.
 - Music adapts to the user’s mood and location (if shared).
 
+   ![Meditation](screenshots/meditation.png)
+   ![Timer](screenshots/timer.png)
+
 ### 7. **Brain Games**
 
 - Includes games like Sudoku to activate both the left and right hemispheres of the brain.
 - Enhances cognitive function and mental stimulation.
+
+   ![Brain Games](screenshots/brain_games_therapy.png)
 
 ### 8. **Mood Tracking**
 
 - Tracks the user’s mood over time.
 - Provides insights and trends to help users understand their emotional well-being.
 
+   ![Mood Tracker](screenshots/mood_tracker.png)
+
 ### 9. **Journaling**
 
 - Users can log their thoughts and experiences.
 - Journals are integrated with mood tracking for deeper insights.
+
+   ![Mood Tracker](screenshots/mood_tracker.png)
+   ![Reflections](screenshots/reflections.png)
+   ![Journal](screenshots/journal.png)
 
 ### 10. **Therapy Assistant**
 
@@ -125,44 +145,6 @@ Create a `.env` file in the project root and add the following:
 JAMENDO_API_KEY=<your-jamendo-api-key>
 NGROK_URL=<Authentication-key>
 ```
-
-## Usage with Screenshots
-
-1. **Login/Sign Up**:
-   - Create an account or log in to access personalized features.
-   | <img src="screenshots/mindwave.png" width="100" /> | <img src="screenshots/onboarding_AVD.png" width="100" /> |
-   | -------------------------------------------------- | --------------------------------------------------------- |
-   | <img src="screenshots/Onboarding.png" width="100" /> |
-
-2. **Input EEG Values**:
-   - Navigate to the EEG tab and input AVD values for mood detection.
-   | <img src="screenshots/user_input.png" width="100" /> | <img src="screenshots/AVD.png" width="100" /> |
-
-3. **Sentiment Analysis**:
-   - Enter text in the sentiment analysis section to detect mood.
-
-4. **Access Playlists**:
-   - View a curated playlist based on your mood.
-   | <img src="screenshots/Home.png" width="100" /> | <img src="screenshots/Mood_based_songs.png" width="100" /> |
-
-5. **Meditation**:
-   - Choose a therapeutic theme or set a timer for a session.
-   | <img src="screenshots/meditation.png" width="100" /> | <img src="screenshots/timer.png" width="100" /> |
-   - Location-based music generation using MusicGen (Facebook)
-   | <img src="screenshots/maps_location.png" width="100" /> | <img src="screenshots/player.png" width="100" /> |
-
-6. **Brain Games**:
-   - Play Sudoku or other games to stimulate cognitive function.
-   | <img src="screenshots/brain_games_therapy.png" width="100" /> |
-
-7. **Track Mood**:
-   - Monitor mood trends and insights in the tracking section.
-   | <img src="screenshots/mood_tracker.png" width="100" /> |
-
-8. **Journal**:
-   - Log daily thoughts and link them with mood data to enhance the models’ performance.
-   | <img src="screenshots/mood_tracker.png" width="100" /> | <img src="screenshots/reflections.png" width="100" /> |
-   | <img src="screenshots/journal.png" width="100" /> |
 
 ## Future Enhancements
 
