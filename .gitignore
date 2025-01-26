@@ -29,6 +29,3 @@ build/
 # MongoDB data (if you’re storing it locally)
 data/
 dump/
-
-# music folder in backend folder
-backend/music/
