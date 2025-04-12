@@ -182,6 +182,6 @@ NGROK_URL=<Authentication-key>
 Contributions are welcome! Please fork the repository and submit a pull request for any feature additions or bug fixes.
 
 ## DEMO
-
+recording of the demo is in utils/demo.mp4
 <video src="../MindWave-Minor/utils/Screen Recording 2025-04-12 at 2.42.03 PM.mov" width="300" >
 
