@@ -5,9 +5,7 @@
 
 This project is a React Native application designed to promote mental well-being through personalized music therapy and mental health assistance. It integrates EEG-based emotion recognition, sentiment analysis, music generation, and therapeutic activities. Users can access curated playlists, generate custom music, and engage in meditation and brain-activating games.
 
-## DEMO
 
-<video src="../MindWave-Minor/utils/Screen Recording 2025-04-12 at 2.42.03 PM.mov" width="300" >
 
 ## Key Features
 
@@ -182,4 +180,8 @@ NGROK_URL=<Authentication-key>
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request for any feature additions or bug fixes.
+
+## DEMO
+
+<video src="../MindWave-Minor/utils/Screen Recording 2025-04-12 at 2.42.03 PM.mov" width="300" >
 
